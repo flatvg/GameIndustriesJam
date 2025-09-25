@@ -6,20 +6,19 @@ using UnityEngine.SceneManagement;
 public class Tutorial : MonoBehaviour
 {
     private bool changeSceneFlag = false;
-    private SceneLoader loader;
 
     // Start is called before the first frame update
     void Start()
     {
-        loader = GetComponent<SceneLoader>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!changeSceneFlag)
+        if (Input.GetKeyDown(KeyCode.Return) && !changeSceneFlag)
         {
-            loader.LoadNewScene("Game");
+            SceneManager.LoadScene("Game");
+            changeSceneFlag = true;
         }
     }
 }

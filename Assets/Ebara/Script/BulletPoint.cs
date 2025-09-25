@@ -23,6 +23,8 @@ public class BulletPoint : MonoBehaviour
     private List<Bullet> bullets;     // 生成した弾を保持
     private float _rotDeg;            // 累積回転角
 
+    private float angleSpeed = 100.0f;
+
     public GameObject bulletPrefab;
 
     void Awake()
@@ -34,7 +36,6 @@ public class BulletPoint : MonoBehaviour
     {
         if (!bulletPrefab)
         {
-            Debug.LogError("[BulletPoint] bulletPrefab が未設定っス！");
             return;
         }
 
@@ -59,14 +60,15 @@ public class BulletPoint : MonoBehaviour
         var points = GetPoints2D();
 
         // 生成済みの弾を新しい円周上の位置に移動
-        for (int i = 0; i < points.Count && i < bullets.Count; i++)
-        {
-            if (bullets[i] == null) continue;
-            var t = bullets[i].transform;
-            t.position = new Vector3(points[i].x, points[i].y, t.position.z);
-            // 向きも回したければ↓を適宜使うっス（任意）
-            // t.right = (t.position - transform.position).normalized; // 接線/放射方向など好みで
-        }
+        //for (int i = 0; i < points.Count && i < bullets.Count; i++)
+        //{
+        //    if (bullets[i] == null) continue;
+        //    var t = bullets[i].transform;
+        //    t.position = new Vector3(points[i].x, points[i].y, t.position.z);
+        //    // 向きも回したければ↓を適宜使う
+        //    // t.right = (t.position - transform.position).normalized; // 接線/放射方向など好みで
+        //}
+        transform.Rotate(0f, 0f, angleSpeed * Time.deltaTime);
     }
 
     public void Shot(Vector2 direction)

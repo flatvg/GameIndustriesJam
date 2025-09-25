@@ -1,17 +1,19 @@
-ï»¿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Windows;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField]Vector3 moveDirection = Vector3.zero; // ç§»å‹•æ–¹å‘
-    [SerializeField]float moveSpeed = 0.0f;               // ç§»å‹•é€Ÿåº¦
-    [SerializeField]bool isAttack = false;                // ç™ºå°„ã—ã¦ã„ã‚‹ã‹
+    [SerializeField] Vector3 moveDirection = Vector3.zero; // ˆÚ“®•ûŒü
+    [SerializeField] float moveSpeed = 1f;                 // ˆÚ“®‘¬“x
+    [SerializeField] float outMargin = 0.05f;              // ‰æ–ÊŠO‚©‚ğ”»•Ê‚·‚éÛ‚É—]”’
+    [SerializeField] float coolDownTime = 1.5f;            // ‰æ–ÊŠO‚Éo‚½Û‚ÌƒN[ƒ‹ƒ_ƒEƒ“ŠÔ
+    public bool isShot = false;                            // ”­Ë‚µ‚Ä‚¢‚é‚©
+    public Transform bindPoint;                            // ‰ñ“]‚ÌQÆ“X
 
-    [SerializeField] float bulletInterval = 360 / 5;      // å¼¾ã®é–“éš”
-
-    //Player player; // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸æ–§å‚ç…§
+    int level = 0; // ’e‚ÌƒŒƒxƒ‹
+    //Player player; // ƒvƒŒƒCƒ„[‚Ö‚ÌQÆ
 
     // Start is called before the first frame update
     void Start()
@@ -22,24 +24,68 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isAttack) return;
+        if (!isShot)
+        {
+            // ƒ|ƒCƒ“ƒg‚ª‘¶İ‚µ‚Ä‚¢‚é‚©Šm”F
+            if (bindPoint != null)
+            {
+                transform.position = bindPoint.position;
+                transform.rotation = bindPoint.rotation;
+            }
+        }
+        else
+        {
+            // ˆÚ“®
+            transform.position += moveDirection * moveSpeed * Time.deltaTime;
+        }
 
-        // ç§»å‹•
-        transform.position += moveDirection * moveSpeed;
+        // ‰æ–ÊŠO‚Éo‚½‚©”»’f
+        if (IsOutOfScreen(Camera.main))
+        {
+            // ’x‰„§Œä
+            StartCoroutine(HandleOutOfScreenLater());
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        // æ•µã«å½“ãŸã£ãŸæ™‚
-        if(collision.gameObject.tag == "Enemy")
+        // “G‚É“–‚½‚Á‚½
+        if (collision.gameObject.tag == "Enemy")
         {
 
         }
     }
 
-    public void Shot(Vector2 direction)
+    public void Shot(Vector2 direction, float deg)
     {
+        // ˆÊ’u‚ğƒvƒŒƒCƒ„[‚Ì‘O‚Éİ’è
+        // ref BulletPoint point = player.bulletPoint.radius;
+        // transform.position = player.transform.position + (direction * radius);
+        transform.rotation = Quaternion.Euler(0, 0, deg + 90);
         moveDirection = direction;
-        isAttack = true;
+        isShot = true;
+    }
+
+    // ‰æ–ÊŠO‚Éo‚½Û‚É§Œä
+    IEnumerator HandleOutOfScreenLater()
+    {
+        yield return new WaitForSeconds(coolDownTime);
+
+        // ‰ñ“]ó‘Ô‚É‚·‚é
+        isShot = false;
+    }
+
+    // ‰æ–ÊŠO‚Éo‚½‚©
+    private bool IsOutOfScreen(Camera cam)
+    {
+        if (cam == null) return false;
+        Vector3 vp = cam.WorldToViewportPoint(transform.position);
+
+        // ƒJƒƒ‰”w–Ê‚É‰ñ‚Á‚½‚ç‘¦ƒAƒEƒg
+        if (vp.z < 0f) return true;
+
+        // —]”’‚ğl—¶‚µ‚Ä”ÍˆÍŠO‚È‚çƒAƒEƒg
+        return (vp.x < -outMargin || vp.x > 1f + outMargin ||
+                vp.y < -outMargin || vp.y > 1f + outMargin);
     }
 }

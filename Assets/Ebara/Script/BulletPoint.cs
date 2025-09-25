@@ -1,130 +1,220 @@
-ï»¿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-// ã“ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ã‚¢ãƒƒã‚¿ãƒã™ã‚‹æƒ³å®š
+
 public class BulletPoint : MonoBehaviour
 {
-    [Header("é…ç½®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿")]
-    [Min(0f)] public float radius = 2.0f;                 // å††ã®åŠå¾„
-    [Range(0f, 360f)] public float startOffsetDeg = 0f;   // æœ€åˆã®ç‚¹ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆè§’
-    public bool alignToFacing = true;                     // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®Zå›è»¢ã«åˆã‚ã›ã‚‹
+    [Header("ƒŠƒ“ƒOİ’è")]
+    [Min(0f)] public float radius = 2.0f;                  // ƒvƒŒƒCƒ„[‚©‚ç‚Ì‹——£i‰ñ“]j
+    [SerializeField, Min(1)] int pointCount = 5;           // ’e‚Ì”i‰Â•Ïj
 
-    [SerializeField] Vector2 shotDirection = Vector2.zero;
+    [SerializeField] float angleSpeed = 100.0f;            // e‚Ì‰ñ“]‘¬“x(Z)
+    public GameObject bulletPrefab;                        // ¶¬‚·‚é’e
 
-    [Header("å›è»¢ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿")]
-    public float angularSpeedDeg = 90f; // 1ç§’ã‚ãŸã‚Šã®å›è»¢è§’ï¼ˆ+ã§åæ™‚è¨ˆå›ã‚Šï¼‰
+    [SerializeField] float spriteAlignDeg = 270f;          // ƒXƒvƒ‰ƒCƒg‚É“K—p‚·‚éz²‚ÌƒIƒtƒZƒbƒg
+    [SerializeField] bool isDrawDebugTriangle = false;     // ƒfƒoƒbƒO—pOŠpŒ`•`‰æƒtƒ‰ƒO
 
-    [SerializeField] Vector2 shotPos = Vector2.zero;
+    readonly List<Transform> points = new();               // ƒŠƒ“ƒOãƒ|ƒCƒ“ƒg
+    readonly List<Bullet> bullets = new();                 // ¶¬‚µ‚½’e
+    private float rotDeg;                                  // —İÏ‰ñ“]i•K—v‚È‚çg—pj
 
-    const float StepDeg = 72f; // 72åº¦é–“éš”ï¼ˆ=5ç‚¹ï¼‰
-    const int PointCount = 5;
-
-    private List<Bullet> bullets;     // ç”Ÿæˆã—ãŸå¼¾ã‚’ä¿æŒ
-    private float _rotDeg;            // ç´¯ç©å›è»¢è§’
-
-    private float angleSpeed = 100.0f;
-
-    public GameObject bulletPrefab;
+    // ’¼‹ß’li•ÏXŒŸ’m—pj
+    int lastPointCount;
+    float lastRadius;
+    bool lastIsDrawDebugTriangle;
 
     void Awake()
     {
-        bullets = new List<Bullet>(PointCount);
-    }
-
-    void Start()
-    {
-        if (!bulletPrefab)
-        {
-            return;
-        }
-
-        // æœ€åˆã®é…ç½®ã§å¼¾ã‚’ç”Ÿæˆ
-        var points = GetPoints2D();
-        for (int i = 0; i < points.Count; i++)
-        {
-            var pos3 = new Vector3(points[i].x, points[i].y, 0f);
-            GameObject obj = Instantiate(bulletPrefab, pos3, Quaternion.identity);
-            Bullet bullet = obj.GetComponent<Bullet>();
-            // Bullet ã‚³ãƒ³ãƒãŒç„¡ãã¦ã‚‚å‹•ã‹ã—ãŸã„ãªã‚‰ Transform ã‚’ç›´æ¥ä¿æŒã§ã‚‚OKã£ã‚¹
-            if (bullet != null) bullets.Add(bullet);
-            else bullets.Add(null); // ã‚¹ãƒ­ãƒƒãƒˆæ•°ã‚’åˆã‚ã›ã‚‹
-        }
+        RebuildRing();     // ‰Šú¶¬
+        HandleDebugTriangle(true);
+        lastPointCount = pointCount;
+        lastRadius = radius;
+        lastIsDrawDebugTriangle = isDrawDebugTriangle;
     }
 
     void Update()
     {
-        // è§’åº¦ã‚’ç©ç®—ã—ã¦0-360ã«æ­£è¦åŒ–
-        _rotDeg = Mathf.Repeat(_rotDeg + angularSpeedDeg * Time.deltaTime, 360f);
-
-        var points = GetPoints2D();
-
-        // ç”Ÿæˆæ¸ˆã¿ã®å¼¾ã‚’æ–°ã—ã„å††å‘¨ä¸Šã®ä½ç½®ã«ç§»å‹•
-        //for (int i = 0; i < points.Count && i < bullets.Count; i++)
-        //{
-        //    if (bullets[i] == null) continue;
-        //    var t = bullets[i].transform;
-        //    t.position = new Vector3(points[i].x, points[i].y, t.position.z);
-        //    // å‘ãã‚‚å›ã—ãŸã‘ã‚Œã°â†“ã‚’é©å®œä½¿ã†
-        //    // t.right = (t.position - transform.position).normalized; // æ¥ç·š/æ”¾å°„æ–¹å‘ãªã©å¥½ã¿ã§
-        //}
+        // eƒIƒuƒWƒFƒNƒg‚ğ‰ñ‚·i]—ˆ’Ê‚èj
         transform.Rotate(0f, 0f, angleSpeed * Time.deltaTime);
+
+        // ƒCƒ“ƒXƒyƒNƒ^‚âƒR[ƒh‚©‚ç‚Ì•ÏX‚ğŒŸ’m‚µ‚Ä”½‰f
+        if (pointCount != lastPointCount)
+        {
+            RebuildRing();
+            lastPointCount = pointCount;
+        }
+        else if (!Mathf.Approximately(radius, lastRadius))
+        {
+            UpdatePointPositions();
+            lastRadius = radius;
+        }
+
+        // ƒfƒoƒbƒO—pOŠpŒ`•`‰æ§Œä
+        HandleDebugTriangle();
+
+        /* TEST CODE */
+        if (Input.GetMouseButtonDown(0))
+            TryShotFromClick(Input.mousePosition);
     }
 
+    void RebuildRing()
+    {
+        // Šù‘¶‚Ì’e‚Æƒ|ƒCƒ“ƒg‚ğ®—
+        for (int i = 0; i < bullets.Count; i++)
+        {
+            if (bullets[i]) Destroy(bullets[i].gameObject);
+        }
+        bullets.Clear();
+
+        for (int i = 0; i < points.Count; i++)
+        {
+            if (points[i]) Destroy(points[i].gameObject);
+        }
+        points.Clear();
+
+        // V‹K‚Éƒ|ƒCƒ“ƒg‚Æ’e‚ğì¬
+        for (int i = 0; i < pointCount; i++)
+        {
+            var pt = new GameObject($"BulletPoint_{i}").transform;
+            pt.SetParent(transform, false);
+            points.Add(pt);
+        }
+        UpdatePointPositions(); // ”¼Œa‚É‰‚¶‚ÄƒŠƒ“ƒO”z’u
+
+        // ’e‚Ì¶¬‚ÆƒoƒCƒ“ƒh
+        for (int i = 0; i < pointCount; i++)
+        {
+            var pt = points[i];
+            var obj = Instantiate(bulletPrefab, pt.position, pt.rotation);
+            // ‰ñ“]‚Éz²‚É‘Î‚µ‚ÄƒIƒtƒZƒbƒg‚ğ“K—p
+            //obj.transform.rotation *= Quaternion.Euler(0f, 0f, spriteAlignDeg);
+            var b = obj.GetComponent<Bullet>();
+            if (b != null)
+            {
+                b.bindPoint = pt; // ‰ñ“]ó‘Ô‚Å’Ç]
+                b.isShot = false; // ‰Šú‚Í‰ñ“]ó‘Ô
+                bullets.Add(b);
+            }
+        }
+    }
+
+    //void UpdatePointPositions()
+    //{
+    //    if (points.Count == 0) return;
+
+    //    float step = 360f / Mathf.Max(1, pointCount);
+    //    float baseDeg = rotDeg + transform.eulerAngles.z;
+
+    //    for (int i = 0; i < points.Count; i++)
+    //    {
+    //        float deg = baseDeg + i * step;
+    //        float rad = deg * Mathf.Deg2Rad;
+    //        // XY•½–Ê‚Ì‰~ã‚É localPosition ‚Å”z’u
+    //        Vector3 local = new Vector3(Mathf.Cos(rad) * radius, Mathf.Sin(rad) * radius, 0f);
+    //        points[i].localPosition = local;
+    //        points[i].localRotation = Quaternion.Euler(0, 0, deg);
+    //    }
+    //}
+    void UpdatePointPositions()
+    {
+        if (points.Count == 0) return;
+
+        float step = 360f / Mathf.Max(1, pointCount);
+
+        // e‚ÌŒ»İŠp“x
+        float parentZ = transform.eulerAngles.z;
+
+        for (int i = 0; i < points.Count; i++)
+        {
+            // ƒ[ƒ‹ƒh‚Å‚Ìg•úËŠph‚ğŒvZie‚Ì‰ñ“]‚Í‚±‚±‚Å‚Í“ü‚ê‚È‚¢j
+            float worldAngle = i * step; // •K—v‚È‚çŠî€ƒIƒtƒZƒbƒg‚ğ‘«‚·
+
+            // ˆÊ’u‚Íƒ[ƒJƒ‹‚Å‰~”z’uie‚ª‰ñ‚ê‚Îˆê‚É‰ñ‚éj
+            float rad = worldAngle * Mathf.Deg2Rad;
+            Vector3 local = new Vector3(Mathf.Cos(rad) * radius, Mathf.Sin(rad) * radius, 0f);
+            points[i].localPosition = local;
+
+            // Œü‚«Fƒ[ƒ‹ƒh‚Å worldAngle ‚ğŒü‚©‚¹‚½‚¢‚Ì‚ÅA
+            // q‚Ì localRotation = worldAngle - eŠp + ƒXƒvƒ‰ƒCƒg•â³
+            float localFace = worldAngle - parentZ + spriteAlignDeg;
+            points[i].localRotation = Quaternion.Euler(0, 0, localFace);
+        }
+    }
+
+    void TryShotFromClick(Vector2 clickScreenPos)
+    {
+        // UI ã‚Í–³‹i”CˆÓj
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
+
+        var cam = Camera.main;
+        if (!cam) return;
+
+        // ©•ª‚ÌƒXƒNƒŠ[ƒ“À•W
+        Vector3 selfScreen = cam.WorldToScreenPoint(transform.position);
+        Vector2 dirScreen = clickScreenPos - (Vector2)selfScreen;
+        if (dirScreen.sqrMagnitude < 1e-8f) return;
+
+        // ƒXƒNƒŠ[ƒ“ ¨ ƒ[ƒ‹ƒhiXY‘O’ñj
+        float zDist = Mathf.Abs(transform.position.z - cam.transform.position.z);
+        Vector3 clickWorld = cam.ScreenToWorldPoint(new Vector3(clickScreenPos.x, clickScreenPos.y, zDist));
+        Vector2 dirWorld = (Vector2)(clickWorld - transform.position);
+
+        Shot(dirWorld);
+    }
+
+    // ƒfƒoƒbƒO—pOŠpŒ`•`‰æ§Œä
+    void HandleDebugTriangle(bool forceChange = false)
+    {
+        if (lastIsDrawDebugTriangle != isDrawDebugTriangle || forceChange)
+        {
+            lastIsDrawDebugTriangle = isDrawDebugTriangle;
+            foreach (Transform t in GetComponentInChildren<Transform>(true))
+            {
+                if (t == transform) continue; // ©g‚ÍœŠO
+                SpriteRenderer renderer = t.GetComponent<SpriteRenderer>();
+                if (renderer != null)
+                {
+                    renderer.enabled = isDrawDebugTriangle;
+                }
+            }
+        }
+    }
+
+    // Å‚à‹ß‚¢–¢”­Ë’e‚ğŒ‚‚Â
     public void Shot(Vector2 direction)
     {
-        Vector2 targetPos = new Vector2(transform.position.x, transform.position.y) + (direction.normalized * radius);
-    }
-
-    /// <summary>
-    /// å††å‘¨ä¸Šã®åº§æ¨™ã‚’è¿”ã™ï¼ˆ72åº¦é–“éš”ã€å›è»¢åæ˜ ã€2Dï¼‰
-    /// </summary>
-    public List<Vector2> GetPoints2D()
-    {
-        var result = new List<Vector2>(PointCount);
+        if (bullets.Count == 0) return;
+        if (direction.sqrMagnitude < Mathf.Epsilon) return;
 
         Vector2 center = transform.position;
+        Vector2 targetPos = center + direction.normalized * radius;
 
-        // åŸºæº–è§’ï¼ˆé–‹å§‹ã‚ªãƒ•ã‚»ãƒƒãƒˆ + ç´¯ç©å›è»¢ + ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‘ãï¼‰
-        float baseDeg = startOffsetDeg + _rotDeg;
-        if (alignToFacing) baseDeg += transform.eulerAngles.z;
+        float best = float.MaxValue;
+        Bullet pick = null;
 
-        for (int i = 0; i < PointCount; i++)
+        foreach (var b in bullets)
         {
-            float deg = baseDeg + i * StepDeg;   // 0,72,144,216,288 (+ã‚ªãƒ•ã‚»ãƒƒãƒˆ)
-            float rad = deg * Mathf.Deg2Rad;
-
-            float x = center.x + radius * Mathf.Cos(rad);
-            float y = center.y + radius * Mathf.Sin(rad);
-            result.Add(new Vector2(x, y));
+            if (!b || b.isShot) continue;
+            float dist = Vector2.Distance(targetPos, b.transform.position);
+            if (dist < best) { best = dist; pick = b; }
         }
-        return result;
+
+        if (pick != null)
+        {
+            Vector2 d = center - targetPos;
+            float deg = Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg;
+            if (deg < 0f) deg += 360f;
+            pick.Shot(direction.normalized, deg);
+        }
     }
 
-    // ã‚·ãƒ¼ãƒ³ä¸Šã§å¯è¦–åŒ–ï¼ˆã‚ªãƒ—ã‚·ãƒ§ãƒ³ï¼‰
+    // --- ƒMƒYƒ‚i”CˆÓj ---
     void OnDrawGizmosSelected()
     {
+        // ‰~
         Gizmos.color = Color.cyan;
-        var points = Application.isPlaying ? GetPoints2D() : PreviewPointsInEditor();
-        foreach (var p in points)
-        {
-            Gizmos.DrawWireSphere(new Vector3(p.x, p.y, 0f), 0.05f);
-        }
-        DrawCircleGizmo();
-    }
-
-    // ã‚¨ãƒ‡ã‚£ã‚¿ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨ï¼ˆå†ç”Ÿå‰ã¯å›è»¢0ã§ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ï¼‰
-    List<Vector2> PreviewPointsInEditor()
-    {
-        float saved = _rotDeg;
-        _rotDeg = 0f;
-        var pts = GetPoints2D();
-        _rotDeg = saved;
-        return pts;
-    }
-
-    void DrawCircleGizmo()
-    {
         const int seg = 60;
         Vector3 prev = transform.position + new Vector3(radius, 0f, 0f);
         for (int i = 1; i <= seg; i++)
@@ -133,6 +223,15 @@ public class BulletPoint : MonoBehaviour
             Vector3 curr = transform.position + new Vector3(Mathf.Cos(t) * radius, Mathf.Sin(t) * radius, 0f);
             Gizmos.DrawLine(prev, curr);
             prev = curr;
+        }
+        // “_
+        Gizmos.color = Color.yellow;
+        float step = 360f / Mathf.Max(1, pointCount);
+        for (int i = 0; i < pointCount; i++)
+        {
+            float rad = (i * step) * Mathf.Deg2Rad;
+            Vector3 p = transform.position + new Vector3(Mathf.Cos(rad) * radius, Mathf.Sin(rad) * radius, 0f);
+            Gizmos.DrawWireSphere(p, 0.05f);
         }
     }
 }

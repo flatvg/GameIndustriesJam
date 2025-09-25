@@ -71,7 +71,7 @@ public class BulletPoint : MonoBehaviour
 
     public void Shot(Vector2 direction)
     {
-        Vector2 targetPos = new Vector2(transform.position.x, transform.position.y) + (direction.normalized * radius)
+        Vector2 targetPos = new Vector2(transform.position.x, transform.position.y) + (direction.normalized * radius);
     }
 
     /// <summary>

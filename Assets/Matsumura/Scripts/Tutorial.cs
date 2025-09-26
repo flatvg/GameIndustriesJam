@@ -15,10 +15,10 @@ public class Tutorial : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return) && !changeSceneFlag)
-        {
-            SceneManager.LoadScene("Game");
-            changeSceneFlag = true;
-        }
+        //if (Input.GetKeyDown(KeyCode.Return) && !changeSceneFlag)
+        //{
+        //    SceneManager.LoadScene("Game");
+        //    changeSceneFlag = true;
+        //}
     }
 }

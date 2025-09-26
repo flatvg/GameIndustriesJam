@@ -1,55 +1,63 @@
-ï»¿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class BulletManager : MonoBehaviour
 {
-    [Header("ãƒªãƒ³ã‚°è¨­å®š")]
-    [Min(0f)] public float radius = 2.0f;                  // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚‰ã®è·é›¢ï¼ˆå›è»¢æ™‚ï¼‰
-    [SerializeField, Min(1)] int pointCount = 5;           // å¼¾ã®æ•°ï¼ˆå¯å¤‰ï¼‰
-    public int bulletDamage = 1;                               // å¼¾ã®ãƒ€ãƒ¡ãƒ¼ã‚¸
+    [Header("ƒŠƒ“ƒOİ’è")]
+    [Min(0f)] public float radius = 2.0f;                  // ƒvƒŒƒCƒ„[‚©‚ç‚Ì‹——£i‰ñ“]j
+    [SerializeField, Min(1)] int pointCount = 5;           // ’e‚Ì”i‰Â•Ïj
+    public int bulletDamage = 1;                               // ’e‚Ìƒ_ƒ[ƒW
 
-    [SerializeField] float angleSpeed = 100.0f;            // è¦ªã®å›è»¢é€Ÿåº¦(Z)
-    public GameObject bulletPrefab;                        // ç”Ÿæˆã™ã‚‹å¼¾
-    public Player player;                                  // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
+    [SerializeField] float angleSpeed = 100.0f;            // e‚Ì‰ñ“]‘¬“x(Z)
+    public GameObject bulletPrefab;                        // ¶¬‚·‚é’e
+    public Player player;                                  // ƒvƒŒƒCƒ„[
+    public EnemySpawnaer spawnaer;
+    public int chainCount = 5;
+    public float thunderInterval = 0.05f;
+    Coroutine chainRoutine;
 
-    [SerializeField] float spriteAlignDeg = 270f;          // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã«é©ç”¨ã™ã‚‹zè»¸ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
-    [SerializeField] bool isDrawDebugTriangle = false;     // ãƒ‡ãƒãƒƒã‚°ç”¨ä¸‰è§’å½¢æç”»ãƒ•ãƒ©ã‚°
+    [SerializeField] float spriteAlignDeg = 270f;          // ƒXƒvƒ‰ƒCƒg‚É“K—p‚·‚éz²‚ÌƒIƒtƒZƒbƒg
+    [SerializeField] bool isDrawDebugTriangle = false;     // ƒfƒoƒbƒO—pOŠpŒ`•`‰æƒtƒ‰ƒO
 
-    readonly List<Transform> points = new();               // ãƒªãƒ³ã‚°ä¸Šãƒã‚¤ãƒ³ãƒˆ
-    public List<Bullet> bullets = new();                 // ç”Ÿæˆã—ãŸå¼¾
+    readonly List<Transform> points = new();               // ƒŠƒ“ƒOãƒ|ƒCƒ“ƒg
+    public List<Bullet> bullets = new();                 // ¶¬‚µ‚½’e
 
-    private float rot;                                     // ç´¯ç©è§’
+    private float rot;                                     // —İÏŠp
 
-    List<Bullet> bulletBuffer = new (); // ã‚¹ã‚­ãƒ«ã§ä½¿ç”¨ã™ã‚‹ãƒãƒ¬ãƒƒãƒˆ
+    List<Bullet> bulletBuffer = new(); // ƒXƒLƒ‹‚Åg—p‚·‚éƒoƒŒƒbƒg
 
     public GameObject beamPrefab;
 
-    // ç›´è¿‘å€¤ï¼ˆå¤‰æ›´æ¤œçŸ¥ç”¨ï¼‰
+    private ConnectTwoPoints connecter;
+
+    // ’¼‹ß’li•ÏXŒŸ’m—pj
     int lastPointCount;
     float lastRadius;
     bool lastIsDrawDebugTriangle;
 
     void Awake()
     {
-        RebuildRing();     // åˆæœŸç”Ÿæˆ
+        RebuildRing();     // ‰Šú¶¬
         HandleDebugTriangle(true);
         lastPointCount = pointCount;
         lastRadius = radius;
         lastIsDrawDebugTriangle = isDrawDebugTriangle;
+
+        connecter = GetComponent<ConnectTwoPoints>();
     }
 
     void Update()
     {
-        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«è¿½å¾“
+        // ƒvƒŒƒCƒ„[‚É’Ç]
         if (player != null)
             transform.position = player.transform.position;
 
-        // è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å›ã™ï¼ˆå¾“æ¥é€šã‚Šï¼‰
+        // eƒIƒuƒWƒFƒNƒg‚ğ‰ñ‚·i]—ˆ’Ê‚èj
         transform.Rotate(0.0f, 0.0f, angleSpeed * Time.deltaTime);
 
-        // ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ã‚„ã‚³ãƒ¼ãƒ‰ã‹ã‚‰ã®å¤‰æ›´ã‚’æ¤œçŸ¥ã—ã¦åæ˜ 
+        // ƒCƒ“ƒXƒyƒNƒ^‚âƒR[ƒh‚©‚ç‚Ì•ÏX‚ğŒŸ’m‚µ‚Ä”½‰f
         if (pointCount != lastPointCount)
         {
             RebuildRing();
@@ -61,20 +69,25 @@ public class BulletManager : MonoBehaviour
             lastRadius = radius;
         }
 
-        // ãƒ‡ãƒãƒƒã‚°ç”¨ä¸‰è§’å½¢æç”»åˆ¶å¾¡
+        // ƒfƒoƒbƒO—pOŠpŒ`•`‰æ§Œä
         HandleDebugTriangle();
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            GetComponent<ScreenFlash>().FlashSeconds(0.03f, 0.08f);
-            //UseBeam(2, 2);
+            //Vector2 start = new Vector2(player.transform.position.x, player.transform.position.y);
+            //Vector2 end = start + (player.direction * 5);
+            //connecter.CreateLineBetween(start, end);
+            //GetComponent<ScreenFlash>().FlashSeconds(0.03f, 0.08f); // ƒeƒXƒg¬Œ÷
+            //UseSkill2_2(); // ƒeƒXƒg¬Œ÷
+            //UseSkill3_3(); // ƒeƒXƒg¬Œ÷
+            UseSkill5_5();
         }
     }
 
-    // å›è»¢ä½ç½®ã‚’å†ç”Ÿæˆ
+    // ‰ñ“]ˆÊ’u‚ğÄ¶¬
     void RebuildRing()
     {
-        // æ—¢å­˜ã®å¼¾ã¨ãƒã‚¤ãƒ³ãƒˆã‚’æ•´ç†
+        // Šù‘¶‚Ì’e‚Æƒ|ƒCƒ“ƒg‚ğ®—
         for (int i = 0; i < bullets.Count; i++)
         {
             if (bullets[i]) Destroy(bullets[i].gameObject);
@@ -87,62 +100,61 @@ public class BulletManager : MonoBehaviour
         }
         points.Clear();
 
-        // æ–°è¦ã«ãƒã‚¤ãƒ³ãƒˆã¨å¼¾ã‚’ä½œæˆ
+        // V‹K‚Éƒ|ƒCƒ“ƒg‚Æ’e‚ğì¬
         for (int i = 0; i < pointCount; i++)
         {
             var pt = new GameObject($"BulletPoint_{i}").transform;
             pt.SetParent(transform, false);
             points.Add(pt);
         }
-        UpdatePointPositions(); // åŠå¾„ã«å¿œã˜ã¦ãƒªãƒ³ã‚°é…ç½®
+        UpdatePointPositions(); // ”¼Œa‚É‰‚¶‚ÄƒŠƒ“ƒO”z’u
 
-        // å¼¾ã®ç”Ÿæˆã¨ãƒã‚¤ãƒ³ãƒ‰
+        // ’e‚Ì¶¬‚ÆƒoƒCƒ“ƒh
         for (int i = 0; i < pointCount; i++)
         {
             var pt = points[i];
             var obj = Instantiate(bulletPrefab, pt.position, pt.rotation);
-            // å›è»¢ã«zè»¸ã«å¯¾ã—ã¦ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚’é©ç”¨
+            // ‰ñ“]‚Éz²‚É‘Î‚µ‚ÄƒIƒtƒZƒbƒg‚ğ“K—p
             //obj.transform.rotation *= Quaternion.Euler(0f, 0f, spriteAlignDeg);
             var b = obj.GetComponent<Bullet>();
             if (b != null)
             {
-                b.manager = this;      // ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
-                b.bindPoint = pt;      // å›è»¢çŠ¶æ…‹ã§è¿½å¾“
-                b.isShot = false;      // åˆæœŸã¯å›è»¢çŠ¶æ…‹
+                b.manager = this;      // ƒ}ƒl[ƒWƒƒ[‚ğƒZƒbƒg
+                b.bindPoint = pt;      // ‰ñ“]ó‘Ô‚Å’Ç]
+                b.isShot = false;      // ‰Šú‚Í‰ñ“]ó‘Ô
                 bullets.Add(b);
             }
         }
     }
 
-    // å›è»¢ä½ç½®ã‚’æ›´æ–°
+    // ‰ñ“]ˆÊ’u‚ğXV
     void UpdatePointPositions()
     {
         if (points.Count == 0) return;
 
         float step = 360f / Mathf.Max(1, pointCount);
 
-        // è¦ªã®ç¾åœ¨è§’åº¦
+        // e‚ÌŒ»İŠp“x
         float parentZ = transform.eulerAngles.z;
 
         for (int i = 0; i < points.Count; i++)
         {
-            // ãƒ¯ãƒ¼ãƒ«ãƒ‰ã§ã®â€œæ”¾å°„è§’â€ã‚’è¨ˆç®—ï¼ˆè¦ªã®å›è»¢ã¯ã“ã“ã§ã¯å…¥ã‚Œãªã„ï¼‰
-            float worldAngle = i * step; // å¿…è¦ãªã‚‰åŸºæº–ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚’è¶³ã™
+            // ƒ[ƒ‹ƒh‚Å‚Ìg•úËŠph‚ğŒvZie‚Ì‰ñ“]‚Í‚±‚±‚Å‚Í“ü‚ê‚È‚¢j
+            float worldAngle = i * step; // •K—v‚È‚çŠî€ƒIƒtƒZƒbƒg‚ğ‘«‚·
 
-            // ä½ç½®ã¯ãƒ­ãƒ¼ã‚«ãƒ«ã§å††é…ç½®ï¼ˆè¦ªãŒå›ã‚Œã°ä¸€ç·’ã«å›ã‚‹ï¼‰
+            // ˆÊ’u‚Íƒ[ƒJƒ‹‚Å‰~”z’uie‚ª‰ñ‚ê‚Îˆê‚É‰ñ‚éj
             float rad = worldAngle * Mathf.Deg2Rad;
             Vector3 local = new Vector3(Mathf.Cos(rad) * radius, Mathf.Sin(rad) * radius, 0f);
             points[i].localPosition = local;
 
-            // å‘ãï¼šãƒ¯ãƒ¼ãƒ«ãƒ‰ã§ worldAngle ã‚’å‘ã‹ã›ãŸã„ã®ã§ã€
-            // å­ã® localRotation = worldAngle - è¦ªè§’ + ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆè£œæ­£
+            // Œü‚«Fƒ[ƒ‹ƒh‚Å worldAngle ‚ğŒü‚©‚¹‚½‚¢‚Ì‚ÅA
+            // q‚Ì localRotation = worldAngle - eŠp + ƒXƒvƒ‰ƒCƒg•â³
             float localFace = worldAngle - parentZ + spriteAlignDeg;
             points[i].localRotation = Quaternion.Euler(0, 0, localFace);
         }
     }
 
-    // ã‚¹ã‚­ãƒ«(å¼·åŠ›ãªæ”»æ’ƒ)ã‚’ä½¿ç”¨
-    void UseBeam(int level, int count)
+    private bool IsUseSkill(int level, int count)
     {
         int c = 0;
         List<Bullet> skillBullets = new List<Bullet>();
@@ -153,9 +165,9 @@ public class BulletManager : MonoBehaviour
                 skillBullets.Insert(c++, bullet);
             }
         }
-        if (c < count) return;
+        if (c < count) return false;
 
-        for(int i = 0; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
             var v = skillBullets[i];
             if (v != null)
@@ -164,6 +176,14 @@ public class BulletManager : MonoBehaviour
             }
         }
         skillBullets.Clear();
+
+        return true;
+    }
+
+    // ƒXƒLƒ‹(‹­—Í‚ÈUŒ‚)‚ğg—p
+    public void UseSkill2_2()
+    {
+        if (!IsUseSkill(2, 2)) return;
 
         Vector2 targetPos = (Vector2)player.transform.position + (player.direction * radius);
 
@@ -174,28 +194,89 @@ public class BulletManager : MonoBehaviour
         b.manager = this;
     }
 
-    //void TryShotFromClick(Vector2 clickScreenPos)
-    //{
-    //    // UI ä¸Šã¯ç„¡è¦–ï¼ˆä»»æ„ï¼‰
-    //    if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
+    public void UseSkill3_3()
+    {
+        if (!IsUseSkill(3, 3)) return;
 
-    //    var cam = Camera.main;
-    //    if (!cam) return;
+        Vector2 targetPos = (Vector2)player.transform.position + (player.direction * radius);
 
-    //    // è‡ªåˆ†ã®ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™
-    //    Vector3 selfScreen = cam.WorldToScreenPoint(transform.position);
-    //    Vector2 dirScreen = clickScreenPos - (Vector2)selfScreen;
-    //    if (dirScreen.sqrMagnitude < 1e-8f) return;
+        // “`”dƒŠƒXƒgiÅ‰‚ÍƒvƒŒƒCƒ„[j
+        List<Transform> chainPoints = new List<Transform> { player.transform };
 
-    //    // ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ â†’ ãƒ¯ãƒ¼ãƒ«ãƒ‰ï¼ˆXYå‰æï¼‰
-    //    float zDist = Mathf.Abs(transform.position.z - cam.transform.position.z);
-    //    Vector3 clickWorld = cam.ScreenToWorldPoint(new Vector3(clickScreenPos.x, clickScreenPos.y, zDist));
-    //    Vector2 dirWorld = (Vector2)(clickWorld - transform.position);
+        // ‰æ–Ê“à‚Ì“G‚ğ Transform ƒŠƒXƒg‚ÖiTransform^Component^GameObject ‰½‚Å‚à‘Î‰j
+        var raw = spawnaer.GetInScreenEnemyes() as System.Collections.IEnumerable;
+        var candidates = new List<Transform>();
+        if (raw != null)
+        {
+            foreach (var e in raw)
+            {
+                if (e is Transform t) candidates.Add(t);
+                else if (e is Component cpt && cpt) candidates.Add(cpt.transform);
+                else if (e is GameObject go && go) candidates.Add(go.transform);
+            }
+        }
+        if (candidates.Count == 0) return;
 
-    //    Shot(dirWorld);
-    //}
+        // “`”d‚Ì—¬‚ê‚ğ\’zF–ˆ‰ñŒ»İˆÊ’u‚©‚ç”¼Œa“à‚ÅÅ‚à‹ß‚¢“G‚ğ‘I‚Ô
+        Transform current = player.transform;
+        float hopRadius = radius * 5;               // 1ƒzƒbƒv‚ÌÅ‘å‹——£i•K—v‚È‚ç’²®j
+        int maxJumps = chainCount;                  // ‰½‰ñ’µ‚Ë‚é‚©i•K—v”‚¾‚¯j
+        var used = new HashSet<Transform> { current };
 
-    // ãƒ‡ãƒãƒƒã‚°ç”¨ä¸‰è§’å½¢æç”»åˆ¶å¾¡
+        for (int j = 0; j < maxJumps; j++)
+        {
+            Transform next = null;
+            float bestSq = hopRadius * hopRadius;
+
+            for (int i = 0; i < candidates.Count; i++)
+            {
+                var t = candidates[i];
+                if (t == null || used.Contains(t)) continue;
+
+                float d2 = (t.position - current.position).sqrMagnitude;
+                if (d2 <= bestSq)
+                {
+                    bestSq = d2;
+                    next = t;
+                }
+            }
+
+            if (next == null) break; // ”¼Œa“à‚É‘ÎÛ‚È‚µ‚ÅI—¹
+            chainPoints.Add(next);
+            used.Add(next);
+            current = next;
+        }
+
+        // “G‚É‚Íˆê‰Šm’èƒ_ƒ[ƒW‚ğ—^‚¦‚é
+        foreach (Transform t in chainPoints)
+        {
+            var e = t.GetComponent<EnemyBase>();
+            e?.TakeDamage(3, Vector2.zero);
+        }
+
+        // ŠeƒŠƒ“ƒNŠÔ‚É‰Â‹ƒ‰ƒCƒ“i—‹j‚ğ¶¬
+        for (int i = 0; i < chainPoints.Count - 1; i++)
+        {
+            Vector2 a = chainPoints[i].position;
+            Vector2 b = chainPoints[i + 1].position;
+            connecter.CreateLineBetween(a, b);
+        }
+    }
+
+    public void UseSkill5_5()
+    {
+        //if (!IsUseSkill(5, 5)) return;
+
+        GetComponent<ScreenFlash>().FlashSeconds(0.06f, 0.16f);
+
+        var enemies = spawnaer.GetInScreenEnemyes();
+        foreach (var enemy in enemies)
+        {
+            enemy.TakeDamage(5, Vector2.zero);
+        }
+    }
+
+    // ƒfƒoƒbƒO—pOŠpŒ`•`‰æ§Œä
     void HandleDebugTriangle(bool forceChange = false)
     {
         if (lastIsDrawDebugTriangle != isDrawDebugTriangle || forceChange)
@@ -203,7 +284,7 @@ public class BulletManager : MonoBehaviour
             lastIsDrawDebugTriangle = isDrawDebugTriangle;
             foreach (Transform t in GetComponentInChildren<Transform>(true))
             {
-                if (t == transform) continue; // è‡ªèº«ã¯é™¤å¤–
+                if (t == transform) continue; // ©g‚ÍœŠO
                 SpriteRenderer renderer = t.GetComponent<SpriteRenderer>();
                 if (renderer != null)
                 {
@@ -213,7 +294,7 @@ public class BulletManager : MonoBehaviour
         }
     }
 
-    // æœ€ã‚‚è¿‘ã„æœªç™ºå°„å¼¾ã‚’æ’ƒã¤
+    // Å‚à‹ß‚¢–¢”­Ë’e‚ğŒ‚‚Â
     public void Shot(Vector2 direction)
     {
         if (bullets.Count == 0)
@@ -257,10 +338,10 @@ public class BulletManager : MonoBehaviour
         }
     }
 
-    // ã‚®ã‚ºãƒ¢æç”»
+    // ƒMƒYƒ‚•`‰æ
     void OnDrawGizmosSelected()
     {
-        // å††
+        // ‰~
         Gizmos.color = Color.cyan;
         const int seg = 60;
         Vector3 prev = transform.position + new Vector3(radius, 0f, 0f);
@@ -271,7 +352,7 @@ public class BulletManager : MonoBehaviour
             Gizmos.DrawLine(prev, curr);
             prev = curr;
         }
-        // ç‚¹
+        // “_
         Gizmos.color = Color.yellow;
         float step = 360f / Mathf.Max(1, pointCount);
         for (int i = 0; i < pointCount; i++)

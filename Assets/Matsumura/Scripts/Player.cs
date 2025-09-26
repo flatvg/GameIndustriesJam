@@ -76,54 +76,54 @@ public class Player : MonoBehaviour
 
     private void UpdateSkill3_3()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            // Lv.3 以上のものがいくつあるか数える
-            int level3OverCount = 0;
-            List<int> level3Index = new List<int>();
-            for (int i = 0; i < 5; ++i)
-            {
-                if (manaComp.bullets[i].level >= 2)
-                {
-                    ++level3OverCount;
-                    level3Index.Add(i);
-                }
-            }
+        //if (Input.GetKeyDown(KeyCode.A))
+        //{
+        //    // Lv.3 以上のものがいくつあるか数える
+        //    int level3OverCount = 0;
+        //    List<int> level3Index = new List<int>();
+        //    for (int i = 0; i < 5; ++i)
+        //    {
+        //        if (manaComp.bullets[i].level >= 2)
+        //        {
+        //            ++level3OverCount;
+        //            level3Index.Add(i);
+        //        }
+        //    }
 
-            // Lv.3 以上のものが 3つないのでスキル打てない
-            if (level3OverCount < 2) return;
+        //    // Lv.3 以上のものが 3つないのでスキル打てない
+        //    if (level3OverCount < 2) return;
 
-            // レベルを消費
-            for (int i = 0; i < 3; ++i)
-            {
-                manaComp.bullets[level3Index[i]].level = 1;
-            }
+        //    // レベルを消費
+        //    for (int i = 0; i < 3; ++i)
+        //    {
+        //        manaComp.bullets[level3Index[i]].level = 1;
+        //    }
 
-            // 敵を最大５体レーザービームで倒す
-            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-            List<Vector2> enemyPos = new List<Vector2>();
-            foreach (GameObject enemy in enemies)
-            {
-                enemyPos.Add(enemy.transform.position);
-            }
-            // プレイヤーに一番近い敵を見つけ出す。
-            int mostNearEnemyIndex = 0;
-            float mostNearEnemyLength = 1000;
-            Vector2 playerPosition = transform.position;
-            for(int i = 0; i<enemyPos.Count; ++i)
-            {
-                float distance = Vector2.Distance(playerPosition, enemyPos[i]);
+        //    // 敵を最大５体レーザービームで倒す
+        //    GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        //    List<Vector2> enemyPos = new List<Vector2>();
+        //    foreach (GameObject enemy in enemies)
+        //    {
+        //        enemyPos.Add(enemy.transform.position);
+        //    }
+        //    // プレイヤーに一番近い敵を見つけ出す。
+        //    int mostNearEnemyIndex = 0;
+        //    float mostNearEnemyLength = 1000;
+        //    Vector2 playerPosition = transform.position;
+        //    for(int i = 0; i<enemyPos.Count; ++i)
+        //    {
+        //        float distance = Vector2.Distance(playerPosition, enemyPos[i]);
 
-                if (distance < mostNearEnemyLength)
-                {
-                    mostNearEnemyLength = distance;
-                    mostNearEnemyIndex = i;
-                }
-            }
+        //        if (distance < mostNearEnemyLength)
+        //        {
+        //            mostNearEnemyLength = distance;
+        //            mostNearEnemyIndex = i;
+        //        }
+        //    }
 
-            GetComponent<ConnectTwoPoints>().CreateLineBetween(playerPosition, enemyPos[mostNearEnemyIndex]);
-            Debug.Log("Use Skill");
-        }
+        //    GetComponent<ConnectTwoPoints>().CreateLineBetween(playerPosition, enemyPos[mostNearEnemyIndex]);
+        //    Debug.Log("Use Skill");
+        //}
     }
 
     private void Move(float deltaTime)
@@ -193,7 +193,7 @@ public class Player : MonoBehaviour
 
         if (transform.position.y > topY - spriteSize.y / 2) transform.position = new Vector3(transform.position.x, topY - spriteSize.y / 2, transform.position.z);
         if (transform.position.y < bottomY + spriteSize.y / 2) transform.position = new Vector3(transform.position.x, bottomY + spriteSize.y / 2, transform.position.z);
-        if(transform.position.x > rightX - spriteSize.x /2) transform.position = new Vector2(rightX - spriteSize.x /2, transform.position.y);
-        if(transform.position.x < leftX + spriteSize.x /2) transform.position = new Vector2(leftX + spriteSize.x /2, transform.position.y);
+        if (transform.position.x > rightX - spriteSize.x / 2) transform.position = new Vector2(rightX - spriteSize.x / 2, transform.position.y);
+        if (transform.position.x < leftX + spriteSize.x / 2) transform.position = new Vector2(leftX + spriteSize.x / 2, transform.position.y);
     }
 }

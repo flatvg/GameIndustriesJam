@@ -5,6 +5,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Windows;
 
+// レベルアップのキル数
+// 1 or -> 4 -> 8 -> 16 -> 32
+
 public class Bullet : MonoBehaviour
 {
     [SerializeField] Vector3 moveDirection = Vector3.zero; // 移動方向
@@ -14,19 +17,59 @@ public class Bullet : MonoBehaviour
     [SerializeField] float offsetDeg = 90f;                // 発射時の回転オフセット
     public bool isShot = false;                            // 発射しているか
     public Transform bindPoint;                            // 回転時の参照店
+    private SpriteRenderer renderer;
 
-    int level = 0; // 弾のレベル
+    int attackPower = 0;
+    int pirceCount = 0; // 一度発射でのヒット数
+    int hitCount = 0;   // 累計ヒットする
+    int level = 1;      // 弾のレベル
     public BulletManager manager; // マネージャーへの参照
+
+    Coroutine running;
+    public static readonly int[] KillCount =
+    {
+        0,
+        1,
+        4,
+        8,
+        16,
+        32
+    };
+
+    public static readonly Color[] tirangelColors =
+    {
+        Color.black,
+        Color.blue,
+        Color.green,
+        Color.magenta,
+        Color.yellow,
+        Color.red,
+    };
+
+    private void Awake()
+    {
+        renderer = GetComponent<SpriteRenderer>();
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-
+        running = null;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // レベル設定
+        if(hitCount > KillCount[level])
+        {
+            level++;
+            hitCount = 0;
+        }
+
+        // レベルに応じて色を変更
+        renderer.color = tirangelColors[level];
+
         if (!isShot)
         {
             // ポイントが存在しているか確認
@@ -35,6 +78,10 @@ public class Bullet : MonoBehaviour
                 Player player = manager.player;
                 transform.position = bindPoint.position;
                 transform.rotation = bindPoint.rotation;
+            }
+            else
+            {
+                Debug.Log("Bind Point Not Found.");
             }
         }
         else
@@ -45,11 +92,20 @@ public class Bullet : MonoBehaviour
             // 画面外に出たか判定
             if (IsOutOfScreen(Camera.main))
             {
-                // レベルリセット
-                level = 0;
-
-                // 遅延制御
-                StartCoroutine(HandleOutOfScreenLater());
+                if (running == null)
+                {
+                    if(pirceCount == 0)
+                    {
+                        // 誰にもあったていないのでレベルリセット
+                        running = StartCoroutine(HandleOutOfScreenLater());
+                    }
+                    else
+                    {
+                        // 誰かしらにあったているのでレベルリセットを行なわない
+                        pirceCount = 0;
+                        isShot = false;
+                    }
+                }
             }
         }
     }
@@ -59,15 +115,37 @@ public class Bullet : MonoBehaviour
         // 敵と当たった時
         if(collision.gameObject.tag == "Enemy")
         {
-            // レベルを追加
-            level++;
+            // TakeDamageがtrueの時、この処理を行う
+            {
+                hitCount++;
+                pirceCount++;
+                // 貫通数上限
+                if (pirceCount >= level)
+                {
+                    isShot = false;
+                    // コルーチン中断
+                    if (running != null)
+                    {
+                        StopCoroutine(running);
+                        running = null;
+                    }
+                }
+            }
 
-
+            EnemyBase enemy = collision.gameObject.GetComponent<EnemyBase>();
+            if(enemy != null)
+            {
+                Vector2 knockBack = isShot ? Vector2.zero : enemy.transform.position - manager.player.transform.position;
+                enemy.TakeDamage(isShot ? manager.bulletDamage : 0, knockBack);
+            }
         }
     }
 
     public void Shot(Vector2 direction, float deg)
     {
+        if (isShot) return; // すでに発射されているのでスキップ
+
+        pirceCount = 0; // 貫通カウントリセット
         // 位置をプレイヤーの前に設定
         transform.position = (Vector2)manager.player.transform.position + (direction * manager.radius);
         transform.rotation = Quaternion.Euler(0, 0, deg + offsetDeg);
@@ -80,8 +158,11 @@ public class Bullet : MonoBehaviour
     {
         yield return new WaitForSeconds(coolDownTime);
 
+        // レベルリセット
+        level = 1;
         // 回転状態にする
         isShot = false;
+        running = null;
     }
 
     // 画面外に出たか

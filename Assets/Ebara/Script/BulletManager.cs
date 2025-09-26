@@ -8,6 +8,7 @@ public class BulletManager : MonoBehaviour
     [Header("リング設定")]
     [Min(0f)] public float radius = 2.0f;                  // プレイヤーからの距離（回転時）
     [SerializeField, Min(1)] int pointCount = 5;           // 弾の数（可変）
+    public int bulletDamage = 1;                               // 弾のダメージ
 
     [SerializeField] float angleSpeed = 100.0f;            // 親の回転速度(Z)
     public GameObject bulletPrefab;                        // 生成する弾
@@ -172,8 +173,16 @@ public class BulletManager : MonoBehaviour
     // 最も近い未発射弾を撃つ
     public void Shot(Vector2 direction)
     {
-        if (bullets.Count == 0) return;
-        if (direction.sqrMagnitude < Mathf.Epsilon) return;
+        if (bullets.Count == 0)
+        {
+            Debug.Log("Bullet Count Is 0.");
+            return;
+        }
+        if (direction.sqrMagnitude < Mathf.Epsilon)
+        {
+            Debug.Log("Shot Direction is tiny.");
+            return;
+        }
 
         Vector2 center = transform.position;
         Vector2 targetPos = center + direction.normalized * radius;
@@ -183,9 +192,13 @@ public class BulletManager : MonoBehaviour
 
         foreach (var b in bullets)
         {
-            if (!b || b.isShot) continue;
-            float dist = Vector2.Distance(targetPos, b.transform.position);
-            if (dist < best) { best = dist; pick = b; }
+            if (b.isShot) continue;
+            float dist = Vector2.Distance(targetPos, (Vector2)b.transform.position);
+            if (dist < best)
+            {
+                best = dist;
+                pick = b;
+            }
         }
 
         if (pick != null)
@@ -194,6 +207,10 @@ public class BulletManager : MonoBehaviour
             float deg = Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg;
             if (deg < 0f) deg += 360f;
             pick.Shot(direction.normalized, deg);
+        }
+        else
+        {
+            Debug.Log("Shotble Bullet Not Found.");
         }
     }
 

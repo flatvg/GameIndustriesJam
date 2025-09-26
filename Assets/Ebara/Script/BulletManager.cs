@@ -11,6 +11,7 @@ public class BulletManager : MonoBehaviour
 
     [SerializeField] float angleSpeed = 100.0f;            // 親の回転速度(Z)
     public GameObject bulletPrefab;                        // 生成する弾
+    public Player player;                                  // プレイヤー
 
     [SerializeField] float spriteAlignDeg = 270f;          // スプライトに適用するz軸のオフセット
     [SerializeField] bool isDrawDebugTriangle = false;     // デバッグ用三角形描画フラグ
@@ -30,6 +31,7 @@ public class BulletManager : MonoBehaviour
         lastPointCount = pointCount;
         lastRadius = radius;
         lastIsDrawDebugTriangle = isDrawDebugTriangle;
+        player = GetComponent<Player>();
     }
 
     void Update()
@@ -88,8 +90,9 @@ public class BulletManager : MonoBehaviour
             var b = obj.GetComponent<Bullet>();
             if (b != null)
             {
-                b.bindPoint = pt; // 回転状態で追従
-                b.isShot = false; // 初期は回転状態
+                b.manager = this;      // マネージャーをセット
+                b.bindPoint = pt;      // 回転状態で追従
+                b.isShot = false;      // 初期は回転状態
                 bullets.Add(b);
             }
         }

@@ -10,11 +10,12 @@ public class Bullet : MonoBehaviour
     [SerializeField] float moveSpeed = 1f;                 // 移動速度
     [SerializeField] float outMargin = 0.05f;              // 画面外かを判別する際に余白
     [SerializeField] float coolDownTime = 1.5f;            // 画面外に出た際のクールダウン時間
+    [SerializeField] float offsetDeg = 90f;                // 発射時の回転オフセット
     public bool isShot = false;                            // 発射しているか
     public Transform bindPoint;                            // 回転時の参照店
 
     int level = 0; // 弾のレベル
-    //Player player; // プレイヤーへの参照
+    public BulletManager manager; // マネージャーへの参照
 
     // Start is called before the first frame update
     void Start()
@@ -38,21 +39,27 @@ public class Bullet : MonoBehaviour
         {
             // 移動
             transform.position += moveDirection * moveSpeed * Time.deltaTime;
-        }
 
-        // 画面外に出たか判定
-        if (IsOutOfScreen(Camera.main))
-        {
-            // 遅延制御
-            StartCoroutine(HandleOutOfScreenLater());
+            // 画面外に出たか判定
+            if (IsOutOfScreen(Camera.main))
+            {
+                // レベルリセット
+                level = 0;
+
+                // 遅延制御
+                StartCoroutine(HandleOutOfScreenLater());
+            }
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // 敵と当たった時
-        if(collision.collider.gameObject.tag == "Enemy")
+        if(collision.gameObject.tag == "Enemy")
         {
+            // レベルを追加
+            level++;
+
 
         }
     }
@@ -60,9 +67,8 @@ public class Bullet : MonoBehaviour
     public void Shot(Vector2 direction, float deg)
     {
         // 位置をプレイヤーの前に設定
-        // ref BulletPoint point = player.bulletPoint.radius;
-        // transform.position = player.transform.position + (direction * radius);
-        transform.rotation = Quaternion.Euler(0, 0, deg + 90);
+        transform.position = (Vector2)manager.player.transform.position + (direction * manager.radius);
+        transform.rotation = Quaternion.Euler(0, 0, deg + offsetDeg);
         moveDirection = direction;
         isShot = true;
     }

@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 
     public bool isDeath { get; private set; }
 
+    public BulletManager manaComp;
     public bool isShot { get; private set; }
     public Vector2 direction { get; private set; }
 
@@ -72,6 +73,7 @@ public class Player : MonoBehaviour
         // マウス左クリックで射撃
         if(Input.GetMouseButtonDown(0))
         {
+            manaComp?.Shot(direction);
             isShot = true;
             Debug.Log("Shot");
         }

@@ -41,6 +41,7 @@ public class ChangeScene : MonoBehaviour
     // 更新は1フレームにつき1回呼び出される
     void Update()
     {
+
     }
 
     //クリックされたら

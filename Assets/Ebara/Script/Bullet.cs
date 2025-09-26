@@ -1,19 +1,19 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Windows;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] Vector3 moveDirection = Vector3.zero; // ˆÚ“®•ûŒü
-    [SerializeField] float moveSpeed = 1f;                 // ˆÚ“®‘¬“x
-    [SerializeField] float outMargin = 0.05f;              // ‰æ–ÊŠO‚©‚ğ”»•Ê‚·‚éÛ‚É—]”’
-    [SerializeField] float coolDownTime = 1.5f;            // ‰æ–ÊŠO‚Éo‚½Û‚ÌƒN[ƒ‹ƒ_ƒEƒ“ŠÔ
-    public bool isShot = false;                            // ”­Ë‚µ‚Ä‚¢‚é‚©
-    public Transform bindPoint;                            // ‰ñ“]‚ÌQÆ“X
+    [SerializeField] Vector3 moveDirection = Vector3.zero; // ç§»å‹•æ–¹å‘
+    [SerializeField] float moveSpeed = 1f;                 // ç§»å‹•é€Ÿåº¦
+    [SerializeField] float outMargin = 0.05f;              // ç”»é¢å¤–ã‹ã‚’åˆ¤åˆ¥ã™ã‚‹éš›ã«ä½™ç™½
+    [SerializeField] float coolDownTime = 1.5f;            // ç”»é¢å¤–ã«å‡ºãŸéš›ã®ã‚¯ãƒ¼ãƒ«ãƒ€ã‚¦ãƒ³æ™‚é–“
+    public bool isShot = false;                            // ç™ºå°„ã—ã¦ã„ã‚‹ã‹
+    public Transform bindPoint;                            // å›è»¢æ™‚ã®å‚ç…§åº—
 
-    int level = 0; // ’e‚ÌƒŒƒxƒ‹
-    //Player player; // ƒvƒŒƒCƒ„[‚Ö‚ÌQÆ
+    int level = 0; // å¼¾ã®ãƒ¬ãƒ™ãƒ«
+    //Player player; // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸ã®å‚ç…§
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +26,7 @@ public class Bullet : MonoBehaviour
     {
         if (!isShot)
         {
-            // ƒ|ƒCƒ“ƒg‚ª‘¶İ‚µ‚Ä‚¢‚é‚©Šm”F
+            // ãƒã‚¤ãƒ³ãƒˆãŒå­˜åœ¨ã—ã¦ã„ã‚‹ã‹ç¢ºèª
             if (bindPoint != null)
             {
                 transform.position = bindPoint.position;
@@ -35,21 +35,21 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            // ˆÚ“®
+            // ç§»å‹•
             transform.position += moveDirection * moveSpeed * Time.deltaTime;
         }
 
-        // ‰æ–ÊŠO‚Éo‚½‚©”»’f
+        // ç”»é¢å¤–ã«å‡ºãŸã‹åˆ¤å®š
         if (IsOutOfScreen(Camera.main))
         {
-            // ’x‰„§Œä
+            // é…å»¶åˆ¶å¾¡
             StartCoroutine(HandleOutOfScreenLater());
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        // “G‚É“–‚½‚Á‚½
+        // æ•µã«å½“ãŸã£ãŸæ™‚
         if (collision.gameObject.tag == "Enemy")
         {
 
@@ -58,7 +58,7 @@ public class Bullet : MonoBehaviour
 
     public void Shot(Vector2 direction, float deg)
     {
-        // ˆÊ’u‚ğƒvƒŒƒCƒ„[‚Ì‘O‚Éİ’è
+        // ä½ç½®ã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‰ã«è¨­å®š
         // ref BulletPoint point = player.bulletPoint.radius;
         // transform.position = player.transform.position + (direction * radius);
         transform.rotation = Quaternion.Euler(0, 0, deg + 90);
@@ -66,25 +66,25 @@ public class Bullet : MonoBehaviour
         isShot = true;
     }
 
-    // ‰æ–ÊŠO‚Éo‚½Û‚É§Œä
+    // ç”»é¢å¤–ã«å‡ºãŸéš›ã«åˆ¶å¾¡
     IEnumerator HandleOutOfScreenLater()
     {
         yield return new WaitForSeconds(coolDownTime);
 
-        // ‰ñ“]ó‘Ô‚É‚·‚é
+        // å›è»¢çŠ¶æ…‹ã«ã™ã‚‹
         isShot = false;
     }
 
-    // ‰æ–ÊŠO‚Éo‚½‚©
+    // ç”»é¢å¤–ã«å‡ºãŸã‹
     private bool IsOutOfScreen(Camera cam)
     {
         if (cam == null) return false;
         Vector3 vp = cam.WorldToViewportPoint(transform.position);
 
-        // ƒJƒƒ‰”w–Ê‚É‰ñ‚Á‚½‚ç‘¦ƒAƒEƒg
+        // ã‚«ãƒ¡ãƒ©èƒŒé¢ã«å›ã£ãŸã‚‰å³ã‚¢ã‚¦ãƒˆ
         if (vp.z < 0f) return true;
 
-        // —]”’‚ğl—¶‚µ‚Ä”ÍˆÍŠO‚È‚çƒAƒEƒg
+        // ä½™ç™½ã‚’è€ƒæ…®ã—ã¦ç¯„å›²å¤–ãªã‚‰ã‚¢ã‚¦ãƒˆ
         return (vp.x < -outMargin || vp.x > 1f + outMargin ||
                 vp.y < -outMargin || vp.y > 1f + outMargin);
     }

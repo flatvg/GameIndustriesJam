@@ -1,33 +1,32 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-
 public class BulletPoint : MonoBehaviour
 {
-    [Header("ƒŠƒ“ƒOİ’è")]
-    [Min(0f)] public float radius = 2.0f;                  // ƒvƒŒƒCƒ„[‚©‚ç‚Ì‹——£i‰ñ“]j
-    [SerializeField, Min(1)] int pointCount = 5;           // ’e‚Ì”i‰Â•Ïj
+    [Header("ãƒªãƒ³ã‚°è¨­å®š")]
+    [Min(0f)] public float radius = 2.0f;                  // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚‰ã®è·é›¢ï¼ˆå›è»¢æ™‚ï¼‰
+    [SerializeField, Min(1)] int pointCount = 5;           // å¼¾ã®æ•°ï¼ˆå¯å¤‰ï¼‰
 
-    [SerializeField] float angleSpeed = 100.0f;            // e‚Ì‰ñ“]‘¬“x(Z)
-    public GameObject bulletPrefab;                        // ¶¬‚·‚é’e
+    [SerializeField] float angleSpeed = 100.0f;            // è¦ªã®å›è»¢é€Ÿåº¦(Z)
+    public GameObject bulletPrefab;                        // ç”Ÿæˆã™ã‚‹å¼¾
 
-    [SerializeField] float spriteAlignDeg = 270f;          // ƒXƒvƒ‰ƒCƒg‚É“K—p‚·‚éz²‚ÌƒIƒtƒZƒbƒg
-    [SerializeField] bool isDrawDebugTriangle = false;     // ƒfƒoƒbƒO—pOŠpŒ`•`‰æƒtƒ‰ƒO
+    [SerializeField] float spriteAlignDeg = 270f;          // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã«é©ç”¨ã™ã‚‹zè»¸ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+    [SerializeField] bool isDrawDebugTriangle = false;     // ãƒ‡ãƒãƒƒã‚°ç”¨ä¸‰è§’å½¢æç”»ãƒ•ãƒ©ã‚°
 
-    readonly List<Transform> points = new();               // ƒŠƒ“ƒOãƒ|ƒCƒ“ƒg
-    readonly List<Bullet> bullets = new();                 // ¶¬‚µ‚½’e
-    private float rotDeg;                                  // —İÏ‰ñ“]i•K—v‚È‚çg—pj
+    readonly List<Transform> points = new();               // ãƒªãƒ³ã‚°ä¸Šãƒã‚¤ãƒ³ãƒˆ
+    readonly List<Bullet> bullets = new();                 // ç”Ÿæˆã—ãŸå¼¾
+    private float rotDeg;                                  // ç´¯ç©å›è»¢ï¼ˆå¿…è¦ãªã‚‰ä½¿ç”¨ï¼‰
 
-    // ’¼‹ß’li•ÏXŒŸ’m—pj
+    // ç›´è¿‘å€¤ï¼ˆå¤‰æ›´æ¤œçŸ¥ç”¨ï¼‰
     int lastPointCount;
     float lastRadius;
     bool lastIsDrawDebugTriangle;
 
     void Awake()
     {
-        RebuildRing();     // ‰Šú¶¬
+        RebuildRing();     // åˆæœŸç”Ÿæˆ
         HandleDebugTriangle(true);
         lastPointCount = pointCount;
         lastRadius = radius;
@@ -36,10 +35,10 @@ public class BulletPoint : MonoBehaviour
 
     void Update()
     {
-        // eƒIƒuƒWƒFƒNƒg‚ğ‰ñ‚·i]—ˆ’Ê‚èj
+        // è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å›ã™ï¼ˆå¾“æ¥é€šã‚Šï¼‰
         transform.Rotate(0f, 0f, angleSpeed * Time.deltaTime);
 
-        // ƒCƒ“ƒXƒyƒNƒ^‚âƒR[ƒh‚©‚ç‚Ì•ÏX‚ğŒŸ’m‚µ‚Ä”½‰f
+        // ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ã‚„ã‚³ãƒ¼ãƒ‰ã‹ã‚‰ã®å¤‰æ›´ã‚’æ¤œçŸ¥ã—ã¦åæ˜ 
         if (pointCount != lastPointCount)
         {
             RebuildRing();
@@ -51,17 +50,13 @@ public class BulletPoint : MonoBehaviour
             lastRadius = radius;
         }
 
-        // ƒfƒoƒbƒO—pOŠpŒ`•`‰æ§Œä
+        // ãƒ‡ãƒãƒƒã‚°ç”¨ä¸‰è§’å½¢æç”»åˆ¶å¾¡
         HandleDebugTriangle();
-
-        /* TEST CODE */
-        if (Input.GetMouseButtonDown(0))
-            TryShotFromClick(Input.mousePosition);
     }
 
     void RebuildRing()
     {
-        // Šù‘¶‚Ì’e‚Æƒ|ƒCƒ“ƒg‚ğ®—
+        // æ—¢å­˜ã®å¼¾ã¨ãƒã‚¤ãƒ³ãƒˆã‚’æ•´ç†
         for (int i = 0; i < bullets.Count; i++)
         {
             if (bullets[i]) Destroy(bullets[i].gameObject);
@@ -74,97 +69,80 @@ public class BulletPoint : MonoBehaviour
         }
         points.Clear();
 
-        // V‹K‚Éƒ|ƒCƒ“ƒg‚Æ’e‚ğì¬
+        // æ–°è¦ã«ãƒã‚¤ãƒ³ãƒˆã¨å¼¾ã‚’ä½œæˆ
         for (int i = 0; i < pointCount; i++)
         {
             var pt = new GameObject($"BulletPoint_{i}").transform;
             pt.SetParent(transform, false);
             points.Add(pt);
         }
-        UpdatePointPositions(); // ”¼Œa‚É‰‚¶‚ÄƒŠƒ“ƒO”z’u
+        UpdatePointPositions(); // åŠå¾„ã«å¿œã˜ã¦ãƒªãƒ³ã‚°é…ç½®
 
-        // ’e‚Ì¶¬‚ÆƒoƒCƒ“ƒh
+        // å¼¾ã®ç”Ÿæˆã¨ãƒã‚¤ãƒ³ãƒ‰
         for (int i = 0; i < pointCount; i++)
         {
             var pt = points[i];
             var obj = Instantiate(bulletPrefab, pt.position, pt.rotation);
-            // ‰ñ“]‚Éz²‚É‘Î‚µ‚ÄƒIƒtƒZƒbƒg‚ğ“K—p
+            // å›è»¢ã«zè»¸ã«å¯¾ã—ã¦ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚’é©ç”¨
             //obj.transform.rotation *= Quaternion.Euler(0f, 0f, spriteAlignDeg);
             var b = obj.GetComponent<Bullet>();
             if (b != null)
             {
-                b.bindPoint = pt; // ‰ñ“]ó‘Ô‚Å’Ç]
-                b.isShot = false; // ‰Šú‚Í‰ñ“]ó‘Ô
+                b.bindPoint = pt; // å›è»¢çŠ¶æ…‹ã§è¿½å¾“
+                b.isShot = false; // åˆæœŸã¯å›è»¢çŠ¶æ…‹
                 bullets.Add(b);
             }
         }
     }
 
-    //void UpdatePointPositions()
-    //{
-    //    if (points.Count == 0) return;
-
-    //    float step = 360f / Mathf.Max(1, pointCount);
-    //    float baseDeg = rotDeg + transform.eulerAngles.z;
-
-    //    for (int i = 0; i < points.Count; i++)
-    //    {
-    //        float deg = baseDeg + i * step;
-    //        float rad = deg * Mathf.Deg2Rad;
-    //        // XY•½–Ê‚Ì‰~ã‚É localPosition ‚Å”z’u
-    //        Vector3 local = new Vector3(Mathf.Cos(rad) * radius, Mathf.Sin(rad) * radius, 0f);
-    //        points[i].localPosition = local;
-    //        points[i].localRotation = Quaternion.Euler(0, 0, deg);
-    //    }
-    //}
     void UpdatePointPositions()
     {
         if (points.Count == 0) return;
 
         float step = 360f / Mathf.Max(1, pointCount);
 
-        // e‚ÌŒ»İŠp“x
+        // è¦ªã®ç¾åœ¨è§’åº¦
         float parentZ = transform.eulerAngles.z;
 
         for (int i = 0; i < points.Count; i++)
         {
-            // ƒ[ƒ‹ƒh‚Å‚Ìg•úËŠph‚ğŒvZie‚Ì‰ñ“]‚Í‚±‚±‚Å‚Í“ü‚ê‚È‚¢j
-            float worldAngle = i * step; // •K—v‚È‚çŠî€ƒIƒtƒZƒbƒg‚ğ‘«‚·
+            // ãƒ¯ãƒ¼ãƒ«ãƒ‰ã§ã®â€œæ”¾å°„è§’â€ã‚’è¨ˆç®—ï¼ˆè¦ªã®å›è»¢ã¯ã“ã“ã§ã¯å…¥ã‚Œãªã„ï¼‰
+            float worldAngle = i * step; // å¿…è¦ãªã‚‰åŸºæº–ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚’è¶³ã™
 
-            // ˆÊ’u‚Íƒ[ƒJƒ‹‚Å‰~”z’uie‚ª‰ñ‚ê‚Îˆê‚É‰ñ‚éj
+            // ä½ç½®ã¯ãƒ­ãƒ¼ã‚«ãƒ«ã§å††é…ç½®ï¼ˆè¦ªãŒå›ã‚Œã°ä¸€ç·’ã«å›ã‚‹ï¼‰
             float rad = worldAngle * Mathf.Deg2Rad;
             Vector3 local = new Vector3(Mathf.Cos(rad) * radius, Mathf.Sin(rad) * radius, 0f);
             points[i].localPosition = local;
 
-            // Œü‚«Fƒ[ƒ‹ƒh‚Å worldAngle ‚ğŒü‚©‚¹‚½‚¢‚Ì‚ÅA
-            // q‚Ì localRotation = worldAngle - eŠp + ƒXƒvƒ‰ƒCƒg•â³
+            // å‘ãï¼šãƒ¯ãƒ¼ãƒ«ãƒ‰ã§ worldAngle ã‚’å‘ã‹ã›ãŸã„ã®ã§ã€
+            // å­ã® localRotation = worldAngle - è¦ªè§’ + ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆè£œæ­£
             float localFace = worldAngle - parentZ + spriteAlignDeg;
             points[i].localRotation = Quaternion.Euler(0, 0, localFace);
         }
     }
 
-    void TryShotFromClick(Vector2 clickScreenPos)
-    {
-        // UI ã‚Í–³‹i”CˆÓj
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
+    //void TryShotFromClick(Vector2 clickScreenPos)
+    //{
+    //    // UI ä¸Šã¯ç„¡è¦–ï¼ˆä»»æ„ï¼‰
+    //    if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
-        var cam = Camera.main;
-        if (!cam) return;
+    //    var cam = Camera.main;
+    //    if (!cam) return;
 
-        // ©•ª‚ÌƒXƒNƒŠ[ƒ“À•W
-        Vector3 selfScreen = cam.WorldToScreenPoint(transform.position);
-        Vector2 dirScreen = clickScreenPos - (Vector2)selfScreen;
-        if (dirScreen.sqrMagnitude < 1e-8f) return;
+    //    // è‡ªåˆ†ã®ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™
+    //    Vector3 selfScreen = cam.WorldToScreenPoint(transform.position);
+    //    Vector2 dirScreen = clickScreenPos - (Vector2)selfScreen;
+    //    if (dirScreen.sqrMagnitude < 1e-8f) return;
 
-        // ƒXƒNƒŠ[ƒ“ ¨ ƒ[ƒ‹ƒhiXY‘O’ñj
-        float zDist = Mathf.Abs(transform.position.z - cam.transform.position.z);
-        Vector3 clickWorld = cam.ScreenToWorldPoint(new Vector3(clickScreenPos.x, clickScreenPos.y, zDist));
-        Vector2 dirWorld = (Vector2)(clickWorld - transform.position);
+    //    // ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ â†’ ãƒ¯ãƒ¼ãƒ«ãƒ‰ï¼ˆXYå‰æï¼‰
+    //    float zDist = Mathf.Abs(transform.position.z - cam.transform.position.z);
+    //    Vector3 clickWorld = cam.ScreenToWorldPoint(new Vector3(clickScreenPos.x, clickScreenPos.y, zDist));
+    //    Vector2 dirWorld = (Vector2)(clickWorld - transform.position);
 
-        Shot(dirWorld);
-    }
+    //    Shot(dirWorld);
+    //}
 
-    // ƒfƒoƒbƒO—pOŠpŒ`•`‰æ§Œä
+    // ãƒ‡ãƒãƒƒã‚°ç”¨ä¸‰è§’å½¢æç”»åˆ¶å¾¡
     void HandleDebugTriangle(bool forceChange = false)
     {
         if (lastIsDrawDebugTriangle != isDrawDebugTriangle || forceChange)
@@ -172,7 +150,7 @@ public class BulletPoint : MonoBehaviour
             lastIsDrawDebugTriangle = isDrawDebugTriangle;
             foreach (Transform t in GetComponentInChildren<Transform>(true))
             {
-                if (t == transform) continue; // ©g‚ÍœŠO
+                if (t == transform) continue; // è‡ªèº«ã¯é™¤å¤–
                 SpriteRenderer renderer = t.GetComponent<SpriteRenderer>();
                 if (renderer != null)
                 {
@@ -182,7 +160,7 @@ public class BulletPoint : MonoBehaviour
         }
     }
 
-    // Å‚à‹ß‚¢–¢”­Ë’e‚ğŒ‚‚Â
+    // æœ€ã‚‚è¿‘ã„æœªç™ºå°„å¼¾ã‚’æ’ƒã¤
     public void Shot(Vector2 direction)
     {
         if (bullets.Count == 0) return;
@@ -210,10 +188,10 @@ public class BulletPoint : MonoBehaviour
         }
     }
 
-    // --- ƒMƒYƒ‚i”CˆÓj ---
+    // --- ã‚®ã‚ºãƒ¢ï¼ˆä»»æ„ï¼‰ ---
     void OnDrawGizmosSelected()
     {
-        // ‰~
+        // å††
         Gizmos.color = Color.cyan;
         const int seg = 60;
         Vector3 prev = transform.position + new Vector3(radius, 0f, 0f);
@@ -224,7 +202,7 @@ public class BulletPoint : MonoBehaviour
             Gizmos.DrawLine(prev, curr);
             prev = curr;
         }
-        // “_
+        // ç‚¹
         Gizmos.color = Color.yellow;
         float step = 360f / Mathf.Max(1, pointCount);
         for (int i = 0; i < pointCount; i++)

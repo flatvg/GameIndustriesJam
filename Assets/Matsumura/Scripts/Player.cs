@@ -1,3 +1,6 @@
+// プレイヤーが目かそウじゃないか
+#define PLAYER_EYE
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -6,6 +9,10 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] float speed = 4;
+
+    private SpriteRenderer sprRenderer;
+    private Animator anim;
+    private float length = 0;
 
     public bool isDeath { get; private set; }
 
@@ -19,6 +26,8 @@ public class Player : MonoBehaviour
         isShot = false;
         isDeath = false;
         gameObject.transform.position = Vector3.zero;
+        anim = GetComponent<Animator>();
+        sprRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -26,19 +35,29 @@ public class Player : MonoBehaviour
     {
         float deltaTime = Time.deltaTime;
 
-        // 動き
-        Move(deltaTime);
+        if (!isDeath)
+        {
+            // 動き
+            Move(deltaTime);
 
-        // 角度を変更
-        Turn(deltaTime, direction);
+            // 角度を変更
+#if PLAYER_EYE
+            Turn(deltaTime, direction);
+#endif
 
-        // 射撃処理(入力とフラグだけ)
-        UpdateShot();
+            // 射撃処理(入力とフラグだけ)
+            UpdateShot();
+        }
+
+#if !PLAYER_EYE
+        // アニメ
+        UpdateAnim();
+#endif
 
         // テスト
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            isDeath = true; 
+            isDeath = true;
         }
     }
 
@@ -57,9 +76,15 @@ public class Player : MonoBehaviour
         // 方向取り出す direction は参照するためにメンバ
         direction = vector.normalized;
 
+        // スプライトの左右処理
+        if (vector.x < 0)
+            sprRenderer.flipX = true;
+        else if (vector.x > 0)
+            sprRenderer.flipX = false;
+
         // マウスとプレイヤーのベクトルの長さ　
         // これを使って、マウスとプレイヤーが離れていればスピード
-        float length = vector.magnitude;
+        length = vector.magnitude;
         length = Mathf.Clamp(length, 0, 1);
 
         pos += direction * (speed * length) * deltaTime;
@@ -71,7 +96,7 @@ public class Player : MonoBehaviour
         isShot = false;
 
         // マウス左クリックで射撃
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             manaComp?.Shot(direction);
             isShot = true;
@@ -81,7 +106,13 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(!isDeath)
+        if (!isDeath)
             isDeath = true;
+    }
+
+    private void UpdateAnim()
+    {
+        anim.SetBool("Walk", Mathf.Abs(length) > 0.2f);
+        anim.SetBool("Death", isDeath);
     }
 }

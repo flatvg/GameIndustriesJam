@@ -19,10 +19,10 @@ public class Bullet : MonoBehaviour
     public Transform bindPoint;                            // 回転時の参照店
     private SpriteRenderer renderer;
 
-    int attackPower = 0;
-    int pirceCount = 0; // 一度発射でのヒット数
-    int hitCount = 0;   // 累計ヒットする
-    int level = 1;      // 弾のレベル
+    private int attackPower = 0;
+    private int pirceCount = 0;   // 一度発射でのヒット数
+    private int hitCount = 0;     // 累計ヒットする
+    public int level = 1;         // 弾のレベル
     public BulletManager manager; // マネージャーへの参照
 
     Coroutine running;
@@ -61,7 +61,7 @@ public class Bullet : MonoBehaviour
     void Update()
     {
         // レベル設定
-        if(hitCount > KillCount[level])
+        if(hitCount >= KillCount[level])
         {
             level++;
             hitCount = 0;

@@ -61,6 +61,7 @@ public class EnemyBase : MonoBehaviour
 
         // 自身のコンポーネント取得
         rb = GetComponent<Rigidbody2D>();
+        rb.drag = 2f;
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         // 初期設定
@@ -183,16 +184,18 @@ public class EnemyBase : MonoBehaviour
             transform.position += (Vector3)knockback;
         }
         // ダメージ後の無敵時間
-        if (hp > 0)
+        if (hp > 0 && damage > 0)
         {
             StartInvincibility(damageInvincibilityDuration);
             return false;
         }
-        else
+        else if(hp <= 0)
         {
             Die();
             return true;
         }
+
+        return false;
     }
 
     protected virtual void Die()

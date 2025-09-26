@@ -22,6 +22,10 @@ public class BulletManager : MonoBehaviour
 
     private float rot;                                     // 累積角
 
+    List<Bullet> bulletBuffer = new (); // スキルで使用するバレット
+
+    List<SkillBulletBase> skillBullets = new();
+
     // 直近値（変更検知用）
     int lastPointCount;
     float lastRadius;
@@ -129,6 +133,23 @@ public class BulletManager : MonoBehaviour
             float localFace = worldAngle - parentZ + spriteAlignDeg;
             points[i].localRotation = Quaternion.Euler(0, 0, localFace);
         }
+    }
+
+    // スキル(強力な攻撃)を使用
+    void UseSkill()
+    {
+        List<Bullet> skillBullets = new List<Bullet>();
+        foreach(var b in bullets)
+        {
+            if(b.level >= 3)
+            {
+                skillBullets.Add(b);
+            }
+        }
+        if (bullets.Count < 3) return;
+
+        Vector2 targetPos = (Vector2)player.transform.position + (player.direction * 3);
+
     }
 
     //void TryShotFromClick(Vector2 clickScreenPos)

@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 8.4, y: 4.39, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -135,7 +135,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 1
+  maxHp: 1
   moveSpeed: 2
+  invincibilityDuration: 1
+  damageInvincibilityDuration: 0.2
+  invincibleColor: {r: 1, g: 0, b: 0, a: 1}
   miniEnemyPrefab: {fileID: 2111480535058430036, guid: a99a2cd4599a5e14d8b575b277ae2f15, type: 3}
 --- !u!50 &8909353206464616980
 Rigidbody2D:

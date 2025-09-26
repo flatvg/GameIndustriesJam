@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Matsumura/Game.unity
     guid: 1ad40170b99a49b42977a79231e5256a
+  - enabled: 1
+    path: Assets/Matsumura/Result.unity
+    guid: d7bbb097de823474b95aa7eabb7b34db
   m_configObjects: {}

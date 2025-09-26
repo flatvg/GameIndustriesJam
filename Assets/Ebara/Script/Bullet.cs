@@ -115,28 +115,26 @@ public class Bullet : MonoBehaviour
         // 敵と当たった時
         if(collision.gameObject.tag == "Enemy")
         {
-            // TakeDamageがtrueの時、この処理を行う
-            {
-                hitCount++;
-                pirceCount++;
-                // 貫通数上限
-                if (pirceCount >= level)
-                {
-                    isShot = false;
-                    // コルーチン中断
-                    if (running != null)
-                    {
-                        StopCoroutine(running);
-                        running = null;
-                    }
-                }
-            }
-
             EnemyBase enemy = collision.gameObject.GetComponent<EnemyBase>();
             if(enemy != null)
             {
                 Vector2 knockBack = isShot ? Vector2.zero : enemy.transform.position - manager.player.transform.position;
-                enemy.TakeDamage(isShot ? manager.bulletDamage : 0, knockBack);
+                if(enemy.TakeDamage(isShot ? level : 0, knockBack))
+                {
+                    hitCount++;
+                    pirceCount++;
+                    // 貫通数上限
+                    if (pirceCount >= level)
+                    {
+                        isShot = false;
+                        // コルーチン中断
+                        if (running != null)
+                        {
+                            StopCoroutine(running);
+                            running = null;
+                        }
+                    }
+                }
             }
         }
     }

@@ -162,6 +162,35 @@ public class EnemySpawnaer : MonoBehaviour
         }
     }
 
+    public List<EnemyBase> GetInScreenEnemyes()
+    {
+
+        // 画面内の全ての敵を取得
+        EnemyBase[] allEnemies = FindObjectsOfType<EnemyBase>();
+
+        List<EnemyBase> inScreenEnemyes = new List<EnemyBase>();
+        foreach (EnemyBase enemy in allEnemies)
+        {
+            if (enemy == this || enemy == null || enemy.gameObject == null) continue;
+
+            float distance = Vector2.Distance(transform.position, enemy.transform.position);
+
+            // カメラに映っているかチェック
+            Vector3 screenPoint = Camera.main.WorldToScreenPoint(enemy.transform.position);
+            bool isOnScreen = screenPoint.x > 0 && screenPoint.x < Screen.width &&
+                              screenPoint.y > 0 && screenPoint.y < Screen.height &&
+                              screenPoint.z > 0;
+
+            if (isOnScreen)
+            {
+                //画面内の敵リストに追加
+                inScreenEnemyes.Add(enemy);
+            }
+        }
+
+        return inScreenEnemyes;
+    }
+
     // 単一ウェーブの実行
     private IEnumerator RunWave(WaveSpawnConfig wave)
     {

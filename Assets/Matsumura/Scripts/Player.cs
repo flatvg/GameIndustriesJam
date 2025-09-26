@@ -31,9 +31,6 @@ public class Player : MonoBehaviour
         gameObject.transform.position = Vector3.zero;
         anim = GetComponent<Animator>();
         sprRenderer = gameObject.GetComponent<SpriteRenderer>();
-        
-        spriteSize = sprRenderer.size;
-        child = transform.Find("eye");
     }
 
     // Update is called once per frame

@@ -120,7 +120,7 @@ public class Bullet : MonoBehaviour
                 hitCount++;
                 pirceCount++;
                 // 貫通数上限
-                if (pirceCount > level)
+                if (pirceCount >= level)
                 {
                     isShot = false;
                     // コルーチン中断

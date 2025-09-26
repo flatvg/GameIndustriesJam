@@ -22,6 +22,10 @@ public class BulletManager : MonoBehaviour
 
     private float rot;                                     // 累積角
 
+    List<Bullet> bulletBuffer = new (); // スキルで使用するバレット
+
+    public GameObject beamPrefab;
+
     // 直近値（変更検知用）
     int lastPointCount;
     float lastRadius;
@@ -59,6 +63,11 @@ public class BulletManager : MonoBehaviour
 
         // デバッグ用三角形描画制御
         HandleDebugTriangle();
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            UseBeam(2, 2);
+        }
     }
 
     // 回転位置を再生成
@@ -129,6 +138,39 @@ public class BulletManager : MonoBehaviour
             float localFace = worldAngle - parentZ + spriteAlignDeg;
             points[i].localRotation = Quaternion.Euler(0, 0, localFace);
         }
+    }
+
+    // スキル(強力な攻撃)を使用
+    void UseBeam(int level, int count)
+    {
+        int c = 0;
+        List<Bullet> skillBullets = new List<Bullet>();
+        foreach (var bullet in bullets)
+        {
+            if (bullet.level >= level)
+            {
+                skillBullets.Insert(c++, bullet);
+            }
+        }
+        if (c < count) return;
+
+        for(int i = 0; i < count; i++)
+        {
+            var v = skillBullets[i];
+            if (v != null)
+            {
+                v.level = 1;
+            }
+        }
+        skillBullets.Clear();
+
+        Vector2 targetPos = (Vector2)player.transform.position + (player.direction * radius);
+
+        float a = Mathf.Atan2(player.direction.y, player.direction.x) * Mathf.Rad2Deg;
+        a -= 90f;
+        GameObject obj = GameObject.Instantiate(beamPrefab, targetPos, Quaternion.Euler(0f, 0f, a));
+        BeamBullet b = obj.GetComponent<BeamBullet>();
+        b.manager = this;
     }
 
     //void TryShotFromClick(Vector2 clickScreenPos)

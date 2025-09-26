@@ -16,9 +16,6 @@ public class Player : MonoBehaviour
     private Animator anim;
     private float length = 0;
     private Vector2 spriteSize;
-    private Transform child;
-
-    private float timer = 0;
 
     public bool isDeath { get; private set; }
 
@@ -162,14 +159,6 @@ public class Player : MonoBehaviour
 
         pos += direction * (speed * length) * deltaTime;
         transform.position = pos;
-
-        Vector3 scale = child.transform.localScale;
-        if(timer <= 0)
-            timer += Time.deltaTime;
-        if (timer >= 1)
-            timer -= Time.deltaTime;
-        scale.y *= Mathf.Cos(timer);
-        child.transform.localScale = scale;
     }
 
     private void UpdateShot()

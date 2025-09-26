@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BulletSc : MonoBehaviour
 {
@@ -51,6 +52,11 @@ public class BulletSc : MonoBehaviour
             return;
         }
 
+        if (other.gameObject.CompareTag("Shield"))
+        {
+            Destroy(gameObject);
+        }
+
         if (other.gameObject.CompareTag("Player"))
         {
             // プレイヤーにダメージを与える
@@ -60,6 +66,8 @@ public class BulletSc : MonoBehaviour
             //    Vector2 knockbackDir = (other.transform.position - transform.position).normalized;
             //    playerController.TakeDamage(1, knockbackDir * 2f);
             //
+            Destroy(gameObject);
+            SceneManager.LoadScene("Result");
         }
     }
 }

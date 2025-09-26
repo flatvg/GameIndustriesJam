@@ -61,10 +61,13 @@ public class Bullet : MonoBehaviour
     void Update()
     {
         // レベル設定
-        if(hitCount >= KillCount[level])
+        if (level < KillCount.Length)
         {
-            level++;
-            hitCount = 0;
+            if (hitCount >= KillCount[level])
+            {
+                level++;
+                hitCount = 0;
+            }
         }
 
         // レベルに応じて色を変更

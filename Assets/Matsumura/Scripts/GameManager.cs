@@ -6,8 +6,9 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private bool isStart = false;
+    private float exitTimer = 5;
 
-    public Player playerComp;
+    public OnDeath deathComp;
 
     // Start is called before the first frame update
     void Start()
@@ -17,15 +18,18 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerComp == null)
+        if (deathComp == null)
         {
             Debug.Log("playerComp is null");
             return;
         }
 
-        if(playerComp.isDeath)
+        if(deathComp.isDied)
         {
-            SceneManager.LoadScene("Result");
+            exitTimer -= Time.deltaTime;
+
+            if(exitTimer < 0)
+                SceneManager.LoadScene("Result");
         }
     }
 }

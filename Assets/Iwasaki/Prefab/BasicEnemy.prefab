@@ -106,6 +106,12 @@ MonoBehaviour:
   invincibilityDuration: 1
   damageInvincibilityDuration: 0.2
   invincibleColor: {r: 1, g: 0, b: 0, a: 1}
+  effectPrefab0: {fileID: 7390075503051475359, guid: a0248d83e56de4142a97cca6661c759b, type: 3}
+  effectPrefab1: {fileID: 489570673015312589, guid: 0f6fe4b9bcd6565408d7ef2610378286, type: 3}
+  effectPrefab2: {fileID: 7111363547692172217, guid: 6ff1d0e412108f94d99454fc86cda65e, type: 3}
+  effectPrefab3: {fileID: 5753137198814695076, guid: fdf8fb89676ff254286ce719db140de3, type: 3}
+  effectPrefab4: {fileID: 5249984473494354545, guid: 7f44ef063be834d409179aa23aad2584, type: 3}
+  maxEffectPrefabs: 5
 --- !u!58 &5070272052341844949
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -186,3 +192,9 @@ MonoBehaviour:
   invincibilityDuration: 1
   damageInvincibilityDuration: 0.2
   invincibleColor: {r: 1, g: 0, b: 0, a: 1}
+  effectPrefab0: {fileID: 0}
+  effectPrefab1: {fileID: 0}
+  effectPrefab2: {fileID: 0}
+  effectPrefab3: {fileID: 0}
+  effectPrefab4: {fileID: 0}
+  maxEffectPrefabs: 0

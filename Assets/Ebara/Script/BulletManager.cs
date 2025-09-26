@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class BulletPoint : MonoBehaviour
+public class BulletManager : MonoBehaviour
 {
     [Header("リング設定")]
     [Min(0f)] public float radius = 2.0f;                  // プレイヤーからの距離（回転時）
@@ -17,7 +17,6 @@ public class BulletPoint : MonoBehaviour
 
     readonly List<Transform> points = new();               // リング上ポイント
     readonly List<Bullet> bullets = new();                 // 生成した弾
-    private float rotDeg;                                  // 累積回転（必要なら使用）
 
     // 直近値（変更検知用）
     int lastPointCount;
@@ -54,6 +53,7 @@ public class BulletPoint : MonoBehaviour
         HandleDebugTriangle();
     }
 
+    // 回転位置を再生成
     void RebuildRing()
     {
         // 既存の弾とポイントを整理
@@ -95,6 +95,7 @@ public class BulletPoint : MonoBehaviour
         }
     }
 
+    // 回転位置を更新
     void UpdatePointPositions()
     {
         if (points.Count == 0) return;
@@ -188,7 +189,7 @@ public class BulletPoint : MonoBehaviour
         }
     }
 
-    // --- ギズモ（任意） ---
+    // ギズモ描画
     void OnDrawGizmosSelected()
     {
         // 円

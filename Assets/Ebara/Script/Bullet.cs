@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Windows;
 
@@ -47,10 +48,10 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        // 敵に当たった時
-        if (collision.gameObject.tag == "Enemy")
+        // 敵と当たった時
+        if(collision.collider.gameObject.tag == "Enemy")
         {
 
         }
@@ -67,7 +68,7 @@ public class Bullet : MonoBehaviour
     }
 
     // 画面外に出た際に制御
-    IEnumerator HandleOutOfScreenLater()
+    private IEnumerator HandleOutOfScreenLater()
     {
         yield return new WaitForSeconds(coolDownTime);
 

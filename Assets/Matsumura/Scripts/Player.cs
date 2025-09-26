@@ -3,7 +3,9 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEditor;
+using UnityEditor.U2D;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -13,6 +15,10 @@ public class Player : MonoBehaviour
     private SpriteRenderer sprRenderer;
     private Animator anim;
     private float length = 0;
+    private Vector2 spriteSize;
+    private Transform child;
+
+    private float timer = 0;
 
     public bool isDeath { get; private set; }
 
@@ -28,6 +34,9 @@ public class Player : MonoBehaviour
         gameObject.transform.position = Vector3.zero;
         anim = GetComponent<Animator>();
         sprRenderer = gameObject.GetComponent<SpriteRenderer>();
+        
+        spriteSize = sprRenderer.size;
+        child = transform.Find("eye");
     }
 
     // Update is called once per frame
@@ -56,6 +65,7 @@ public class Player : MonoBehaviour
         // アニメ
         UpdateAnim();
 #endif
+        InCamera();
 
         // テスト
         if (Input.GetKeyDown(KeyCode.Space))
@@ -132,19 +142,34 @@ public class Player : MonoBehaviour
         // 方向取り出す direction は参照するためにメンバ
         direction = vector.normalized;
 
+#if !PLAYER_EYE
         // スプライトの左右処理
         if (vector.x < 0)
             sprRenderer.flipX = true;
         else if (vector.x > 0)
             sprRenderer.flipX = false;
+#endif
 
         // マウスとプレイヤーのベクトルの長さ　
         // これを使って、マウスとプレイヤーが離れていればスピード
         length = vector.magnitude;
+        length = Mathf.Clamp(length, 0, 3);
+
+        if (length < 1.2f)
+            length = 0;
+
         length = Mathf.Clamp(length, 0, 1);
 
         pos += direction * (speed * length) * deltaTime;
         transform.position = pos;
+
+        Vector3 scale = child.transform.localScale;
+        if(timer <= 0)
+            timer += Time.deltaTime;
+        if (timer >= 1)
+            timer -= Time.deltaTime;
+        scale.y *= Mathf.Cos(timer);
+        child.transform.localScale = scale;
     }
 
     private void UpdateShot()
@@ -170,5 +195,19 @@ public class Player : MonoBehaviour
     {
         anim.SetBool("Walk", Mathf.Abs(length) > 0.2f);
         anim.SetBool("Death", isDeath);
+    }
+
+    private void InCamera()
+    {
+        float topY = Camera.main.transform.position.y + Camera.main.orthographicSize;
+        float bottomY = Camera.main.transform.position.y - Camera.main.orthographicSize;
+        float halfWidth = Camera.main.orthographicSize * Camera.main.aspect;
+        float rightX = Camera.main.transform.position.x + halfWidth;
+        float leftX = Camera.main.transform.position.x - halfWidth;
+
+        if (transform.position.y > topY - spriteSize.y / 2) transform.position = new Vector3(transform.position.x, topY - spriteSize.y / 2, transform.position.z);
+        if (transform.position.y < bottomY + spriteSize.y / 2) transform.position = new Vector3(transform.position.x, bottomY + spriteSize.y / 2, transform.position.z);
+        if(transform.position.x > rightX - spriteSize.x /2) transform.position = new Vector2(rightX - spriteSize.x /2, transform.position.y);
+        if(transform.position.x < leftX + spriteSize.x /2) transform.position = new Vector2(leftX + spriteSize.x /2, transform.position.y);
     }
 }

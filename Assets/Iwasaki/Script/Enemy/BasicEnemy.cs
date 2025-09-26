@@ -10,6 +10,6 @@ public class BasicEnemy : EnemyBase
         // 単純にプレイヤーへ向かう
         Transform p = GameObject.FindWithTag("Player").transform;
         Vector3 dir = (p.position - transform.position).normalized;
-        transform.position += dir * moveSpeed * Time.deltaTime;
+        transform.position += dir * GetEffectiveMoveSpeed() * Time.deltaTime;
     }
 }

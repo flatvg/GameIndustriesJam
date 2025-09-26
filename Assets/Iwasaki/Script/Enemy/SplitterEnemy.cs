@@ -10,7 +10,7 @@ public class SplitterEnemy : EnemyBase
     protected override void Move()
     {
         Vector3 dir = (player.position - transform.position).normalized;
-        transform.position += dir * moveSpeed * Time.deltaTime;
+        transform.position += dir * GetEffectiveMoveSpeed() * Time.deltaTime;
     }
 
     protected override void Die()

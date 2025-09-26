@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -8,7 +9,8 @@ public class SkillBulletBase : MonoBehaviour
     [SerializeField] Vector3 moveDirection = Vector3.zero; // 移動方向
     [SerializeField] float moveSpeed = 1f;                 // 移動速度
     [SerializeField] float outMargin = 0.05f;              // 外に出た際の処理
-    private int damage = 1;                                // 敵に与えるダメージ
+    public Transform bindPoint;
+    public int damage = 1;                                // 敵に与えるダメージ
     public bool isShot = false;
 
     public BulletManager manager; // マネージャーへの参照
@@ -16,7 +18,6 @@ public class SkillBulletBase : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -45,21 +46,27 @@ public class SkillBulletBase : MonoBehaviour
         }
     }
 
+    // スキルを打つ処理
+    protected virtual void Shot()
+    {
+        isShot = true;
+    }
+
     // 敵と当たった時の処理
-    protected void OnHitEnemy(EnemyBase enemy)
+    protected virtual void OnHitEnemy(EnemyBase enemy)
     {
         Vector2 knockBack = isShot ? Vector2.zero : enemy.transform.position - manager.player.transform.position;
         enemy.TakeDamage(damage, knockBack);
     }
 
     // 画面買いに出た際の処理
-    protected void OnWithOutScreen()
+    protected virtual void OnWithOutScreen()
     {
         Destroy(gameObject);
     }
 
     // 移動処理
-    protected void Move()
+    protected virtual void Move()
     {
         if (isShot)
             transform.position += moveDirection * moveSpeed * Time.deltaTime;

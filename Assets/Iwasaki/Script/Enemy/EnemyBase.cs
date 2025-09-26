@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Drawing;
 using Unity.Mathematics;
 using UnityEngine;
@@ -68,6 +69,13 @@ public class EnemyBase : MonoBehaviour
     {
         moveSpeed = speed;
     }
+
+    public GameObject effectPrefab0;
+    public GameObject effectPrefab1;
+    public GameObject effectPrefab2;
+    public GameObject effectPrefab3;
+    public GameObject effectPrefab4;
+    [SerializeField] private int maxEffectPrefabs;
 
     // Awake is called when the script instance is being loaded
     void Awake()
@@ -234,6 +242,14 @@ public class EnemyBase : MonoBehaviour
         isDead = true;
         // 死亡エフェクト等の処理をここに追加可能
         OnDeath();
+
+        int effectIndex = UnityEngine.Random.Range(0, maxEffectPrefabs);
+
+        if(effectIndex == 0) GameObject.Instantiate(effectPrefab0, transform.position, transform.rotation);
+        if(effectIndex == 1) GameObject.Instantiate(effectPrefab1, transform.position, transform.rotation);
+        if(effectIndex == 2) GameObject.Instantiate(effectPrefab2, transform.position, transform.rotation);
+        if(effectIndex == 3) GameObject.Instantiate(effectPrefab3, transform.position, transform.rotation);
+        if(effectIndex == 4) GameObject.Instantiate(effectPrefab4, transform.position, transform.rotation);
 
         Destroy(gameObject);
     }

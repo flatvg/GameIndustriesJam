@@ -3,7 +3,13 @@ guid: 93ac9e32f40469c49a4b9ee6f457ad32
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - effectPrefab0: {fileID: 7390075503051475359, guid: a0248d83e56de4142a97cca6661c759b, type: 3}
+  - effectPrefab1: {fileID: 489570673015312589, guid: 0f6fe4b9bcd6565408d7ef2610378286, type: 3}
+  - effectPrefab2: {fileID: 7111363547692172217, guid: 6ff1d0e412108f94d99454fc86cda65e, type: 3}
+  - effectPrefab3: {fileID: 5753137198814695076, guid: fdf8fb89676ff254286ce719db140de3, type: 3}
+  - effectPrefab4: {fileID: 5249984473494354545, guid: 7f44ef063be834d409179aa23aad2584, type: 3}
+  - miniEnemyPrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

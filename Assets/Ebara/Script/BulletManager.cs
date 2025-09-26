@@ -18,7 +18,7 @@ public class BulletManager : MonoBehaviour
     [SerializeField] bool isDrawDebugTriangle = false;     // デバッグ用三角形描画フラグ
 
     readonly List<Transform> points = new();               // リング上ポイント
-    readonly List<Bullet> bullets = new();                 // 生成した弾
+    public List<Bullet> bullets = new();                 // 生成した弾
 
     private float rot;                                     // 累積角
 
@@ -66,7 +66,8 @@ public class BulletManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            UseBeam(2, 2);
+            GetComponent<ScreenFlash>().FlashSeconds(0.03f, 0.08f);
+            //UseBeam(2, 2);
         }
     }
 

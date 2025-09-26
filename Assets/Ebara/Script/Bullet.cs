@@ -17,7 +17,6 @@ public class Bullet : MonoBehaviour
     [SerializeField] float offsetDeg = 90f;                // 発射時の回転オフセット
     public bool isShot = false;                            // 発射しているか
     public Transform bindPoint;                            // 回転時の参照店
-    private SpriteRenderer renderer;
 
     private int attackPower = 0;
     private int pirceCount = 0;   // 一度発射でのヒット数
@@ -46,11 +45,6 @@ public class Bullet : MonoBehaviour
         Color.red,
     };
 
-    private void Awake()
-    {
-        renderer = GetComponent<SpriteRenderer>();
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -71,7 +65,7 @@ public class Bullet : MonoBehaviour
         }
 
         // レベルに応じて色を変更
-        renderer.color = tirangelColors[level];
+        GetComponent<SpriteRenderer>().color = tirangelColors[level];
 
         if (!isShot)
         {

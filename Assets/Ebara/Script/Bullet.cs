@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Windows;
 
@@ -31,6 +32,7 @@ public class Bullet : MonoBehaviour
             // ポイントが存在しているか確認
             if (bindPoint != null)
             {
+                Player player = manager.player;
                 transform.position = bindPoint.position;
                 transform.rotation = bindPoint.rotation;
             }

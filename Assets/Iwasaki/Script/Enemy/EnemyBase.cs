@@ -201,7 +201,7 @@ public class EnemyBase : MonoBehaviour
         // 死亡エフェクト等の処理をここに追加可能
         OnDeath();
 
-        int effectIndex = UnityEngine.Random.Range(0, maxEffectPrefabs - 1);
+        int effectIndex = UnityEngine.Random.Range(0, maxEffectPrefabs);
 
         if(effectIndex == 0) GameObject.Instantiate(effectPrefab0, transform.position, transform.rotation);
         if(effectIndex == 1) GameObject.Instantiate(effectPrefab1, transform.position, transform.rotation);

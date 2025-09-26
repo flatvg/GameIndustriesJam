@@ -1,3 +1,6 @@
+// プレイヤーが目かそウじゃないか
+#define PLAYER_EYE
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -38,14 +41,18 @@ public class Player : MonoBehaviour
             Move(deltaTime);
 
             // 角度を変更
+#if PLAYER_EYE
             Turn(deltaTime, direction);
+#endif
 
             // 射撃処理(入力とフラグだけ)
             UpdateShot();
         }
 
+#if !PLAYER_EYE
         // アニメ
         UpdateAnim();
+#endif
 
         // テスト
         if (Input.GetKeyDown(KeyCode.Space))
@@ -56,8 +63,8 @@ public class Player : MonoBehaviour
 
     private void Turn(float deltaTime, in Vector2 direction)
     {
-        //float angle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
-        //transform.rotation = Quaternion.Euler(0, 0, -angle);
+        float angle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, -angle);
     }
     private void Move(float deltaTime)
     {

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BulletSc : MonoBehaviour
 {
@@ -38,5 +40,34 @@ public class BulletSc : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        // PlayerかShield以外は無視
+        if (!other.gameObject.CompareTag("Player") && !other.gameObject.CompareTag("Shield"))
+        {
+            // コライダーを無視させる場合
+            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), other.collider);
+            return;
+        }
+
+        if (other.gameObject.CompareTag("Shield"))
+        {
+            Destroy(gameObject);
+        }
+
+        if (other.gameObject.CompareTag("Player"))
+        {
+            // プレイヤーにダメージを与える
+            //PlayerController playerController = other.gameObject.GetComponent<PlayerController>();
+            //if (playerController != null)
+            //{
+            //    Vector2 knockbackDir = (other.transform.position - transform.position).normalized;
+            //    playerController.TakeDamage(1, knockbackDir * 2f);
+            //
+            Destroy(gameObject);
+            SceneManager.LoadScene("Result");
+        }
     }
 }

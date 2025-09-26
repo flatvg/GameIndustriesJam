@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 3853651905057255536}
   - component: {fileID: 5358903708589933520}
   m_Layer: 0
-  m_Name: Triangle
-  m_TagString: Untagged
+  m_Name: Bullet
+  m_TagString: Shield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -135,6 +135,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDirection: {x: 0, y: 0, z: 0}
   moveSpeed: 6
+  outMargin: 0.05
+  coolDownTime: 1.5
+  offsetDeg: 90
   isShot: 0
   bindPoint: {fileID: 0}
-  bulletInterval: 72
+  manager: {fileID: 0}

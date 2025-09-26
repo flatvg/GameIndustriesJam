@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1909071499819724502}
   - component: {fileID: 7154706485035173377}
-  - component: {fileID: 8768749610897059761}
   - component: {fileID: 5070272052341844949}
   - component: {fileID: 2486050684372370108}
-  - component: {fileID: 6125689187540212425}
+  - component: {fileID: 6161926914117334693}
   m_Layer: 0
   m_Name: BasicEnemy
   m_TagString: Enemy
@@ -88,24 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8768749610897059761
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2111480535058430036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d3177d271985754792b01b3bd4a7146, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hp: 1
-  maxHp: 1
-  moveSpeed: 2
-  invincibilityDuration: 1
-  damageInvincibilityDuration: 0.2
-  invincibleColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!58 &5070272052341844949
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -168,7 +149,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &6125689187540212425
+--- !u!114 &6161926914117334693
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -177,7 +158,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2111480535058430036}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8886b32a9a4ed0e458ba1b9bfb2c9ef2, type: 3}
+  m_Script: {fileID: 11500000, guid: 3d3177d271985754792b01b3bd4a7146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 1

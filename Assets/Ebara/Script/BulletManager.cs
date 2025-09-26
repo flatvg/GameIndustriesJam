@@ -66,7 +66,8 @@ public class BulletManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            UseBeam(2, 2);
+            GetComponent<ScreenFlash>().FlashSeconds(0.03f, 0.08f);
+            //UseBeam(2, 2);
         }
     }
 

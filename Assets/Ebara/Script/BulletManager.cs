@@ -19,6 +19,8 @@ public class BulletManager : MonoBehaviour
     readonly List<Transform> points = new();               // リング上ポイント
     readonly List<Bullet> bullets = new();                 // 生成した弾
 
+    private float rot;                                     // 累積角
+
     // 直近値（変更検知用）
     int lastPointCount;
     float lastRadius;
@@ -31,13 +33,16 @@ public class BulletManager : MonoBehaviour
         lastPointCount = pointCount;
         lastRadius = radius;
         lastIsDrawDebugTriangle = isDrawDebugTriangle;
-        player = GetComponent<Player>();
     }
 
     void Update()
     {
+        // プレイヤーに追従
+        if (player != null)
+            transform.position = player.transform.position;
+
         // 親オブジェクトを回す（従来通り）
-        transform.Rotate(0f, 0f, angleSpeed * Time.deltaTime);
+        transform.Rotate(0.0f, 0.0f, angleSpeed * Time.deltaTime);
 
         // インスペクタやコードからの変更を検知して反映
         if (pointCount != lastPointCount)

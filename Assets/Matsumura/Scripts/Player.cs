@@ -7,36 +7,24 @@ public class Player : MonoBehaviour
 {
     [SerializeField] float speed = 4;
 
+    public bool isDeath { get; private set; }
+
+    public BulletManager manaComp;
     public bool isShot { get; private set; }
     public Vector2 direction { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
+        isShot = false;
+        isDeath = false;
         gameObject.transform.position = Vector3.zero;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //// オブジェクトの座標取得
-        //Vector2 pos = gameObject.transform.position;
-
-        //// 入力は左クリックで射撃、マウスカーソルに向かってプレイヤーが向かっていく、スキルは多分キーボードの入力
-        //Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float deltaTime = Time.deltaTime;
-
-        //// マウスとプレイヤーとの距離を計算
-        //Vector2 distance =  mousePos - pos;
-        //float length = distance.magnitude;
-        //direction = distance.normalized;
-
-        //// マウスとの距離が遠いほどスピードをあげるためただし、１まで
-        //length = Mathf.Clamp(length, 0, 1);
-
-        //// 角度を変更
-        //float angle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
-        //transform.rotation = Quaternion.Euler(0, 0, -angle);
 
         // 動き
         Move(deltaTime);
@@ -44,10 +32,14 @@ public class Player : MonoBehaviour
         // 角度を変更
         Turn(deltaTime, direction);
 
+        // 射撃処理(入力とフラグだけ)
         UpdateShot();
 
-        //pos += direction * 4 * length * deltaTime;
-        //gameObject.transform.position = pos;
+        // テスト
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            isDeath = true; 
+        }
     }
 
     private void Turn(float deltaTime, in Vector2 direction)
@@ -81,8 +73,15 @@ public class Player : MonoBehaviour
         // マウス左クリックで射撃
         if(Input.GetMouseButtonDown(0))
         {
+            manaComp?.Shot(direction);
             isShot = true;
             Debug.Log("Shot");
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(!isDeath)
+            isDeath = true;
     }
 }

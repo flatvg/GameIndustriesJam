@@ -1,11 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SplitterEnemy : EnemyBase
 {
     [SerializeField,Header("•ª—ô‚·‚é“G")]
     private GameObject miniEnemyPrefab;
+
+    private bool UnderLv = false;
 
     protected override void Move()
     {
@@ -15,16 +20,32 @@ public class SplitterEnemy : EnemyBase
 
     protected override void Die()
     {
-        // •ª—ô‚µ‚Ä¬‚³‚¢“G‚ğ2‘Ì¶¬
-        if (miniEnemyPrefab != null)
+        if (!UnderLv)
         {
-            for (int i = 0; i < 2; i++)
+            // •ª—ô‚µ‚Ä¬‚³‚¢“G‚ğ2‘Ì¶¬
+            if (miniEnemyPrefab != null)
             {
-                Vector2 randDir = Random.insideUnitCircle.normalized;
-                Vector3 spawnPos = transform.position + (Vector3)(randDir * 0.5f);
-                Instantiate(miniEnemyPrefab, spawnPos, Quaternion.identity);
+                for (int i = 0; i < 2; i++)
+                {
+                    Vector2 randDir = Random.insideUnitCircle.normalized;
+                    Vector3 spawnPos = transform.position + (Vector3)(randDir * 0.5f);
+                    Instantiate(miniEnemyPrefab, spawnPos, Quaternion.identity);
+                }
             }
         }
+
         base.Die();
+    }
+
+    protected override void OnHitCol(Collision2D other)
+    {
+        var b = other.gameObject.GetComponent<Bullet>();
+        if (b != null)
+        {
+            if (b.level > maxHp)
+            {
+                UnderLv = true;
+            }
+        }
     }
 }

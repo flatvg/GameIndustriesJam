@@ -42,7 +42,7 @@ public class SplitterEnemy : EnemyBase
         var b = other.gameObject.GetComponent<Bullet>();
         if (b != null)
         {
-            if (b.level > maxHp)
+            if (b.level > maxHp + 1)
             {
                 UnderLv = true;
             }

@@ -270,6 +270,11 @@ public class EnemyBase : MonoBehaviour
         if(effectIndex == 4) GameObject.Instantiate(effectPrefab4, transform.position, transform.rotation);
 
         Destroy(gameObject);
+
+        if (GameSession.Instance != null)
+        {
+            GameSession.Instance.attackScore += GetScore();
+        }
     }
 
     protected virtual void OnDeath()

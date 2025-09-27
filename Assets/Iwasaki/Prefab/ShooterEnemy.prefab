@@ -165,8 +165,8 @@ MonoBehaviour:
   maxHp: 1
   moveSpeed: 2
   score: 125
-  invincibilityDuration: 1
-  damageInvincibilityDuration: 0.2
+  invincibilityDuration: 0.1
+  damageInvincibilityDuration: 0.1
   invincibleColor: {r: 1, g: 0, b: 0, a: 1}
   effectPrefab0: {fileID: 7390075503051475359, guid: a0248d83e56de4142a97cca6661c759b, type: 3}
   effectPrefab1: {fileID: 489570673015312589, guid: 0f6fe4b9bcd6565408d7ef2610378286, type: 3}

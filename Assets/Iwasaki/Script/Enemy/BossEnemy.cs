@@ -55,11 +55,16 @@ public class BossEnemy : EnemyBase
     private Vector2 targetPoint;
     private bool movingToPoint;
 
-    private int loopIndex = 0; // 1ü–Ú=0, 2ü–Ú=1...
+    private int loopIndex = 4; // 1ü–Ú=0, 2ü–Ú=1...
 
     public void SetLoopIndex(int index)
     {
         loopIndex = index;
+    }
+
+    public override int GetScore()
+    {
+        return (maxHp * 10) * (loopIndex + 1);
     }
 
     // ü‰ñ”{—¦ (WaveManager ‚ªİ’è‚·‚é)

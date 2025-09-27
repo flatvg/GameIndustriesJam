@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2823501496771879732
 Transform:
   m_ObjectHideFlags: 0
@@ -39,15 +39,215 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7767481696341715454}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5219eb3013125844c99e1f175124e11b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemies:
-  - prefab: {fileID: 2111480535058430036, guid: a99a2cd4599a5e14d8b575b277ae2f15, type: 3}
-    weight: 40
-  - prefab: {fileID: 7712322408652420593, guid: 7febe989202332341a3376cac4bd7353, type: 3}
-    weight: 10
-  spawnInterval: 2
-  spawnDistance: 10
+  waves:
+  - waveName: Wave1
+    waveNumber: 0
+    spawnInterval: 2
+    spawnDistance: 0
+    maxEnemiesAtOnce: 10
+    waveDuration: 15
+    enemies:
+    - prefab: {fileID: 2111480535058430036, guid: a99a2cd4599a5e14d8b575b277ae2f15, type: 3}
+      weight: 95
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 1
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 1
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    - prefab: {fileID: 2639482901026285486, guid: 7febe989202332341a3376cac4bd7353, type: 3}
+      weight: 3
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 0
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 1
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    - prefab: {fileID: 6374286460394808273, guid: f61ac07eb42b8214c89fec381e805467, type: 3}
+      weight: 2
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 0
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 1
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    nextWaveDelay: 0
+    bossWave: 0
+    bossPrefab: {fileID: 0}
+    spawnOnlyDuringBossSpawnPhase: 0
+  - waveName: Wave2
+    waveNumber: 1
+    spawnInterval: 2
+    spawnDistance: 0
+    maxEnemiesAtOnce: 11
+    waveDuration: 15
+    enemies:
+    - prefab: {fileID: 2111480535058430036, guid: a99a2cd4599a5e14d8b575b277ae2f15, type: 3}
+      weight: 80
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 1
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 1
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    - prefab: {fileID: 2639482901026285486, guid: 7febe989202332341a3376cac4bd7353, type: 3}
+      weight: 15
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 1
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 1
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    - prefab: {fileID: 6374286460394808273, guid: f61ac07eb42b8214c89fec381e805467, type: 3}
+      weight: 5
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 0
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 0
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    nextWaveDelay: 0
+    bossWave: 0
+    bossPrefab: {fileID: 0}
+    spawnOnlyDuringBossSpawnPhase: 0
+  - waveName: Wave3
+    waveNumber: 2
+    spawnInterval: 2
+    spawnDistance: 0
+    maxEnemiesAtOnce: 15
+    waveDuration: 20
+    enemies:
+    - prefab: {fileID: 2111480535058430036, guid: a99a2cd4599a5e14d8b575b277ae2f15, type: 3}
+      weight: 70
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 1
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 0
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    - prefab: {fileID: 2639482901026285486, guid: 7febe989202332341a3376cac4bd7353, type: 3}
+      weight: 15
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 1
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 1
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    - prefab: {fileID: 6374286460394808273, guid: f61ac07eb42b8214c89fec381e805467, type: 3}
+      weight: 10
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 1
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 1
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    - prefab: {fileID: 8794970971679722777, guid: 7653fba709b21f34183315cd5889e1d8, type: 3}
+      weight: 5
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 0
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 1
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    nextWaveDelay: 0
+    bossWave: 0
+    bossPrefab: {fileID: 0}
+    spawnOnlyDuringBossSpawnPhase: 0
+  - waveName: Wave4
+    waveNumber: 3
+    spawnInterval: 2
+    spawnDistance: 0
+    maxEnemiesAtOnce: 20
+    waveDuration: 20
+    enemies:
+    - prefab: {fileID: 2111480535058430036, guid: a99a2cd4599a5e14d8b575b277ae2f15, type: 3}
+      weight: 80
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 1
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 1
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    - prefab: {fileID: 2639482901026285486, guid: 7febe989202332341a3376cac4bd7353, type: 3}
+      weight: 20
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 1
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 1
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    - prefab: {fileID: 6374286460394808273, guid: f61ac07eb42b8214c89fec381e805467, type: 3}
+      weight: 10
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 1
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 1
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    - prefab: {fileID: 8794970971679722777, guid: 7653fba709b21f34183315cd5889e1d8, type: 3}
+      weight: 10
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 1
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 1
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    nextWaveDelay: 0
+    bossWave: 0
+    bossPrefab: {fileID: 0}
+    spawnOnlyDuringBossSpawnPhase: 0
+  - waveName: Wave5(BOSS)
+    waveNumber: 4
+    spawnInterval: 2
+    spawnDistance: 0
+    maxEnemiesAtOnce: 10
+    waveDuration: 0
+    enemies:
+    - prefab: {fileID: 2111480535058430036, guid: a99a2cd4599a5e14d8b575b277ae2f15, type: 3}
+      weight: 95
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 0
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 1
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    - prefab: {fileID: 8794970971679722777, guid: 7653fba709b21f34183315cd5889e1d8, type: 3}
+      weight: 5
+      baseMinLevel: 1
+      baseMaxLevel: 1
+      minLevelIncreasePerLoop: 0
+      maxLevelIncreasePerLoop: 1
+      spawnChance: 1
+      speedMultiplier: 1
+      sizeMultiplier: 1
+    nextWaveDelay: 0
+    bossWave: 1
+    bossPrefab: {fileID: 5943051381199660366, guid: 8bceabde68b9f254a83285963bf36388, type: 3}
+    spawnOnlyDuringBossSpawnPhase: 1
+  autoStartWaves: 1
+  loopWaves: 1
+  levelIncreasePerLoop: 0
+  bossHpMultiplierPerLoop: 1.5
+  extraEnemiesPerLoop: 2
+  currentWaveIndex: 0
+  showDebugInfo: 1

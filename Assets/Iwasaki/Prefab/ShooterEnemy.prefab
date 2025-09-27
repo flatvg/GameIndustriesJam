@@ -164,6 +164,7 @@ MonoBehaviour:
   hp: 1
   maxHp: 1
   moveSpeed: 2
+  score: 125
   invincibilityDuration: 1
   damageInvincibilityDuration: 0.2
   invincibleColor: {r: 1, g: 0, b: 0, a: 1}
@@ -176,4 +177,4 @@ MonoBehaviour:
   bulletPrefab: {fileID: 2030513759603763073, guid: 6fae9724570d9bf4786bb814c2e09e3b, type: 3}
   fireInterval: 2
   orbitRadius: 5
-  orbitSpeed: 90
+  orbitSpeed: 30

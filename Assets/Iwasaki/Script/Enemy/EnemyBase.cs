@@ -14,6 +14,8 @@ public class EnemyBase : MonoBehaviour
     protected int maxHp = 1;
     [SerializeField,Header("移動速度")]
     protected float moveSpeed = 2.0f;
+    [SerializeField, Header("スコア")]
+    protected int score = 0;
 
     [SerializeField, Header("無敵時間設定")]
     protected float invincibilityDuration = 1.0f; // 生成時の無敵時間
@@ -48,6 +50,11 @@ public class EnemyBase : MonoBehaviour
         Color.yellow,
         Color.red,
     };
+
+    public virtual int GetScore()
+    {
+        return score * maxHp;
+    }
 
     public float GetMaxHp()
     {
@@ -271,6 +278,11 @@ public class EnemyBase : MonoBehaviour
         // 例：爆発エフェクト、アイテムドロップ、分裂等
     }
 
+    protected virtual void OnHitCol(Collision2D other)
+    {
+
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -287,6 +299,7 @@ public class EnemyBase : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
+        OnHitCol(other);
         if (other.gameObject.CompareTag("Player"))
         {
             // プレイヤーにダメージを与える

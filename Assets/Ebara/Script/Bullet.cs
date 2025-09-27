@@ -121,17 +121,15 @@ public class Bullet : MonoBehaviour
             if (enemy != null)
             {
                 Vector2 knockBack = isShot ? Vector2.zero : enemy.transform.position - manager.player.transform.position;
-                if (enemy.TakeDamage(isShot ? level : 0, knockBack))
+                enemy.TakeDamage(isShot ? level : 0, knockBack);
+                hitCount++;
+                pirceCount++;
+                isShot = false;
+                // コルーチン中断
+                if (running != null)
                 {
-                    hitCount++;
-                    pirceCount++;
-                    isShot = false;
-                    // コルーチン中断
-                    if (running != null)
-                    {
-                        StopCoroutine(running);
-                        running = null;
-                    }
+                    StopCoroutine(running);
+                    running = null;
                 }
             }
             return;

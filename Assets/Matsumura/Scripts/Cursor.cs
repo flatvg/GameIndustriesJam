@@ -15,10 +15,20 @@ public class Cursor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateGameCursor();
+        if (UpdateGameCursor())
+            return;
+
+        UpdateOtherSceneCursor();
     }
 
-    private void UpdateGameCursor()
+    private void UpdateOtherSceneCursor()
+    {
+        Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        position.z = -1;
+        transform.position = position;
+    }
+
+    private bool UpdateGameCursor()
     {
         if (playerComp != null)
         {
@@ -48,6 +58,9 @@ public class Cursor : MonoBehaviour
             // Šp“x
             float angle = Mathf.Atan2(playerDir.x, playerDir.y) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, 0, -angle);
+
+            return true;
         }
+        return false;
     }
 }

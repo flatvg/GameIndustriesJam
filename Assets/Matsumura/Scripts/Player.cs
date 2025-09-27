@@ -271,7 +271,11 @@ public class Player : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("hit enemy");
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy") ||
+            collision.gameObject.CompareTag("Bullet") ||
+            collision.gameObject.CompareTag("Boss") ||
+            collision.gameObject.CompareTag("BossBeam")
+        )
         {
             // ちょっと無理やり？
             rb.simulated = false;

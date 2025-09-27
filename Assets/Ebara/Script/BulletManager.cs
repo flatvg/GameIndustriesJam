@@ -193,7 +193,7 @@ public class BulletManager : MonoBehaviour
 
     public bool UseSkill3_3()
     {
-        //if (!IsUseSkill(3, 3)) return false;
+        if (!IsUseSkill(3, 3)) return false;
 
         Vector2 targetPos = (Vector2)player.transform.position + (player.direction * radius);
 
@@ -275,7 +275,7 @@ public class BulletManager : MonoBehaviour
 
     public bool UseSkill5_5()
     {
-        //if (!IsUseSkill(5, 5)) return false;
+        if (!IsUseSkill(5, 5)) return false;
 
         GetComponent<ScreenFlash>().FlashSeconds(0.06f, 0.16f);
 

@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
             exitTimer -= Time.deltaTime;
 
             if(exitTimer < 0)
-                SceneManager.LoadScene("Result");
+                SceneManager.LoadScene("SceneResult");
         }
 
         tick += Time.deltaTime;

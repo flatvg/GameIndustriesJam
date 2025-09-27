@@ -1,31 +1,39 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ConnectTwoPoints : MonoBehaviour
 {
-    public Sprite lineSprite; // ƒXƒvƒ‰ƒCƒg‰æ‘œ‚ğƒCƒ“ƒXƒyƒNƒ^[‚©‚çİ’è
+    public Sprite lineSprite; // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆç”»åƒã‚’ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã‹ã‚‰è¨­å®š
 
     public void CreateLineBetween(Vector2 start, Vector2 end)
     {
-        // V‚µ‚¢ GameObject ‚ğì¬
+        // æ–°ã—ã„ GameObject ã‚’ä½œæˆ
         GameObject lineObject = new GameObject("Line");
 
-        // ƒXƒvƒ‰ƒCƒgƒŒƒ“ƒ_ƒ‰[’Ç‰Á
+        // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼è¿½åŠ 
         SpriteRenderer sr = lineObject.AddComponent<SpriteRenderer>();
         sr.sprite = lineSprite;
 
-        // ˆÊ’uİ’èi’†‰›‚É”z’uj
+        // ä½ç½®è¨­å®šï¼ˆä¸­å¤®ã«é…ç½®ï¼‰
         Vector2 center = (start + end) / 2f;
         lineObject.transform.position = center;
 
-        // Šp“xİ’è
+        // è§’åº¦è¨­å®š
         Vector2 direction = end - start;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         lineObject.transform.rotation = Quaternion.Euler(0, 0, angle);
 
-        // ’·‚³‚É‡‚í‚¹‚ÄƒXƒP[ƒŠƒ“ƒO
+        // é•·ã•ã«åˆã‚ã›ã¦ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°
         float length = direction.magnitude;
-        lineObject.transform.localScale = new Vector3(length, 1, 1); // ƒXƒvƒ‰ƒCƒg‚Ì‰¡•‚ª1‚È‚çOK
+        lineObject.transform.localScale = new Vector3(length, 1, 1); // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®æ¨ªå¹…ãŒ1ãªã‚‰OK
+
+        var thounder = lineObject.AddComponent<Thunder>();
+
+        var col = lineObject.AddComponent<CapsuleCollider2D>();
+        col.isTrigger = true;
+        col.direction = CapsuleDirection2D.Horizontal;
+        col.size = sr.sprite.bounds.size;
+        col.offset = Vector2.zero;
     }
 }

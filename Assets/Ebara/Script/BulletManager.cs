@@ -13,10 +13,6 @@ public class BulletManager : MonoBehaviour
     [SerializeField] float angleSpeed = 100.0f;            // 親の回転速度(Z)
     public GameObject bulletPrefab;                        // 生成する弾
     public Player player;                                  // プレイヤー
-    public EnemySpawnaer spawnaer;
-    public int chainCount = 5;
-    public float thunderInterval = 0.05f;
-    Coroutine chainRoutine;
 
     [SerializeField] float spriteAlignDeg = 270f;          // スプライトに適用するz軸のオフセット
     [SerializeField] bool isDrawDebugTriangle = false;     // デバッグ用三角形描画フラグ
@@ -26,11 +22,9 @@ public class BulletManager : MonoBehaviour
 
     private float rot;                                     // 累積角
 
-    List<Bullet> bulletBuffer = new(); // スキルで使用するバレット
+    List<Bullet> bulletBuffer = new (); // スキルで使用するバレット
 
     public GameObject beamPrefab;
-
-    private ConnectTwoPoints connecter;
 
     // 直近値（変更検知用）
     int lastPointCount;
@@ -44,8 +38,6 @@ public class BulletManager : MonoBehaviour
         lastPointCount = pointCount;
         lastRadius = radius;
         lastIsDrawDebugTriangle = isDrawDebugTriangle;
-
-        connecter = GetComponent<ConnectTwoPoints>();
     }
 
     void Update()
@@ -143,7 +135,8 @@ public class BulletManager : MonoBehaviour
         }
     }
 
-    private bool IsUseSkill(int level, int count)
+    // スキル(強力な攻撃)を使用
+    void UseBeam(int level, int count)
     {
         int c = 0;
         List<Bullet> skillBullets = new List<Bullet>();
@@ -154,9 +147,9 @@ public class BulletManager : MonoBehaviour
                 skillBullets.Insert(c++, bullet);
             }
         }
-        if (c < count) return false;
+        if (c < count) return;
 
-        for (int i = 0; i < count; i++)
+        for(int i = 0; i < count; i++)
         {
             var v = skillBullets[i];
             if (v != null)
@@ -165,14 +158,6 @@ public class BulletManager : MonoBehaviour
             }
         }
         skillBullets.Clear();
-
-        return true;
-    }
-
-    // スキル(強力な攻撃)を使用
-    public void UseSkill2_2()
-    {
-        if (!IsUseSkill(2, 2)) return;
 
         Vector2 targetPos = (Vector2)player.transform.position + (player.direction * radius);
 
@@ -183,28 +168,23 @@ public class BulletManager : MonoBehaviour
         b.manager = this;
     }
 
-    public void UseSkill3_3()
-    {
-        if (!IsUseSkill(3, 3)) return;
+    //void TryShotFromClick(Vector2 clickScreenPos)
+    //{
+    //    // UI 上は無視（任意）
+    //    if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
-        Vector2 targetPos = (Vector2)player.transform.position + (player.direction * radius);
+    //    var cam = Camera.main;
+    //    if (!cam) return;
 
-        // 伝播リスト（最初はプレイヤー）
-        List<Transform> chainPoints = new List<Transform> { player.transform };
+    //    // 自分のスクリーン座標
+    //    Vector3 selfScreen = cam.WorldToScreenPoint(transform.position);
+    //    Vector2 dirScreen = clickScreenPos - (Vector2)selfScreen;
+    //    if (dirScreen.sqrMagnitude < 1e-8f) return;
 
-        // 画面内の敵を Transform リストへ（Transform／Component／GameObject 何でも対応）
-        var raw = spawnaer.GetInScreenEnemyes() as System.Collections.IEnumerable;
-        var candidates = new List<Transform>();
-        if (raw != null)
-        {
-            foreach (var e in raw)
-            {
-                if (e is Transform t) candidates.Add(t);
-                else if (e is Component cpt && cpt) candidates.Add(cpt.transform);
-                else if (e is GameObject go && go) candidates.Add(go.transform);
-            }
-        }
-        if (candidates.Count == 0) return;
+    //    // スクリーン → ワールド（XY前提）
+    //    float zDist = Mathf.Abs(transform.position.z - cam.transform.position.z);
+    //    Vector3 clickWorld = cam.ScreenToWorldPoint(new Vector3(clickScreenPos.x, clickScreenPos.y, zDist));
+    //    Vector2 dirWorld = (Vector2)(clickWorld - transform.position);
 
         // 伝播の流れを構築：毎回現在位置から半径内で最も近い敵を選ぶ
         Transform current = player.transform;
@@ -324,19 +304,6 @@ public class BulletManager : MonoBehaviour
         else
         {
             Debug.Log("Shotble Bullet Not Found.");
-        }
-    }
-
-    // プレイヤー死亡時処理
-    public void OnDeath()
-    {
-        foreach (var b in bullets)
-        {
-            if (b.isShot) continue;
-            Vector2 d = b.transform.position - (b.transform.forward * radius);
-            float deg = Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg;
-            if (deg < 0f) deg += 360f;
-            b.Shot(d, deg);
         }
     }
 

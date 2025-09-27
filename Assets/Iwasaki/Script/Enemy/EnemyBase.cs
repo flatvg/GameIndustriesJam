@@ -2,18 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Drawing;
 using Unity.Mathematics;
 using UnityEngine;
-using Color = UnityEngine.Color;
 
 public class EnemyBase : MonoBehaviour
 {
 
     [SerializeField, Header("基本パラメータ")]
-    protected int hp = 1;
+    protected float hp = 1f;
     [SerializeField]
-    protected int maxHp = 1;
+    protected float maxHp = 1f;
     [SerializeField,Header("移動速度")]
     protected float moveSpeed = 2.0f;
 
@@ -40,35 +38,6 @@ public class EnemyBase : MonoBehaviour
     protected Rigidbody2D playerrb;
     protected Rigidbody2D rb;
     protected SpriteRenderer spriteRenderer;
-
-    public static readonly Color[] enemyColors =
-    {
-        Color.black,
-        Color.blue,
-        Color.green,
-        Color.magenta,
-        Color.yellow,
-        Color.red,
-    };
-
-    public float GetMaxHp()
-    {
-        return maxHp;
-
-    }
-    public void SetMaxHp(int HP)
-    {
-        maxHp = HP;
-    }
-    public float GetMoveSpeed()
-    {
-        return moveSpeed;
-
-    }
-    public void SetMoveSpeed(float speed)
-    {
-        moveSpeed = speed;
-    }
 
     public GameObject effectPrefab0;
     public GameObject effectPrefab1;
@@ -99,15 +68,7 @@ public class EnemyBase : MonoBehaviour
         maxHp = hp;
         if (spriteRenderer != null)
         {
-            if (maxHp <= enemyColors.Length - 1)
-            {
-                normalColor = enemyColors[maxHp];
-                spriteRenderer.color = normalColor;
-            }
-            else
-            {
-                normalColor = spriteRenderer.color;
-            }
+            normalColor = spriteRenderer.color;
         }
     }
 
@@ -131,7 +92,7 @@ public class EnemyBase : MonoBehaviour
     }
 
     // Update is called once per frame
-    protected void Update()
+    void Update()
     {
 
         // 無敵時間の更新

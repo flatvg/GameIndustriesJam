@@ -17,6 +17,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] float offsetDeg = 90f;                // 発射時の回転オフセット
     public bool isShot = false;                            // 発射しているか
     public Transform bindPoint;                            // 回転時の参照店
+    private SpriteRenderer renderer;
 
     private int attackPower = 0;
     private int pirceCount = 0;   // 一度発射でのヒット数
@@ -45,6 +46,11 @@ public class Bullet : MonoBehaviour
         Color.red,
     };
 
+    private void Awake()
+    {
+        renderer = GetComponent<SpriteRenderer>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -65,7 +71,7 @@ public class Bullet : MonoBehaviour
         }
 
         // レベルに応じて色を変更
-        GetComponent<SpriteRenderer>().color = tirangelColors[level];
+        renderer.color = tirangelColors[level];
 
         if (!isShot)
         {
@@ -87,12 +93,11 @@ public class Bullet : MonoBehaviour
             transform.position += moveDirection * moveSpeed * Time.deltaTime;
 
             // 画面外に出たか判定
-            if (manager.player.isDeath) return; // プレイヤーが死亡しているならそもそも処理を行わない
             if (IsOutOfScreen(Camera.main))
             {
                 if (running == null)
                 {
-                    if (pirceCount == 0)
+                    if(pirceCount == 0)
                     {
                         // 誰にもあったていないのでレベルリセット
                         running = StartCoroutine(HandleOutOfScreenLater());
@@ -110,37 +115,14 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // ボスとあたった時
-        //if (collision.gameObject.tag == "Boss")
-        //{
-        //    EnemyBoss boss = collision.gameObject.GetComponent<EnemyBoss>();
-        //    if (boss != null)
-        //    {
-        //        // 吹き飛ばさない
-        //        if (boss.TakeDamage(isShot ? level : 0, Vector2.zero))
-        //        {
-        //            hitCount++;
-        //            pirceCount++;
-        //            isShot = false;
-        //            // コルーチン中断
-        //            if (running != null)
-        //            {
-        //                StopCoroutine(running);
-        //                running = null;
-        //            }
-        //        }
-        //    }
-        //    return;
-        //}
-
         // 敵と当たった時
-        if (collision.gameObject.tag == "Enemy")
+        if(collision.gameObject.tag == "Enemy")
         {
             EnemyBase enemy = collision.gameObject.GetComponent<EnemyBase>();
-            if (enemy != null)
+            if(enemy != null)
             {
                 Vector2 knockBack = isShot ? Vector2.zero : enemy.transform.position - manager.player.transform.position;
-                if (enemy.TakeDamage(isShot ? level : 0, knockBack))
+                if(enemy.TakeDamage(isShot ? level : 0, knockBack))
                 {
                     hitCount++;
                     pirceCount++;

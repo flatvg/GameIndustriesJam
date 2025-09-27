@@ -5,14 +5,6 @@ using UnityEngine;
 /// 群れのリーダー - 色違いで画面内の敵に速度バフを付与
 public class SwarmLeader : EnemyBase
 {
-    [Header("群れ設定")]
-    [SerializeField] private MinionEnemy minionPrefab; // 生成するミニオン
-    [SerializeField] private int minionCount = 5;      // 生成数
-    [SerializeField] private float spawnRadius = 2f;   // 自分の周囲に散らす距離
-
-    [SerializeField]
-    private float size = 1f; //大きさ
-
     [SerializeField]
     private float buffRadius = 10f; // バフ効果範囲
     [SerializeField]
@@ -35,22 +27,7 @@ public class SwarmLeader : EnemyBase
         }
 
         // サイズを少し大きく
-        transform.localScale = Vector3.one * size;
-
-        // 自分の周囲にミニオンを配置して部下登録
-        if (minionPrefab != null && minionCount > 0)
-        {
-            for (int i = 0; i < minionCount; i++)
-            {
-                Vector2 offset = Random.insideUnitCircle * spawnRadius;
-                Vector3 spawnPos = transform.position + (Vector3)offset;
-
-                MinionEnemy minion = Instantiate(minionPrefab, spawnPos, Quaternion.identity);
-
-                // リーダーに登録（SetLeaderも中で呼ばれる）
-                AddSubordinate(minion);
-            }
-        }
+        transform.localScale = Vector3.one * 1.2f;
     }
 
     protected override void Move()

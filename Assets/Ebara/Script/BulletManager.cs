@@ -170,9 +170,9 @@ public class BulletManager : MonoBehaviour
     }
 
     // スキル(強力な攻撃)を使用
-    public void UseSkill2_2()
+    public bool UseSkill2_2()
     {
-        if (!IsUseSkill(2, 2)) return;
+        if (!IsUseSkill(2, 2)) return false;
 
         Vector2 targetPos = (Vector2)player.transform.position + (player.direction * radius);
 
@@ -181,11 +181,13 @@ public class BulletManager : MonoBehaviour
         GameObject obj = GameObject.Instantiate(beamPrefab, targetPos, Quaternion.Euler(0f, 0f, a));
         BeamBullet b = obj.GetComponent<BeamBullet>();
         b.manager = this;
+
+        return true;
     }
 
-    public void UseSkill3_3()
+    public bool UseSkill3_3()
     {
-        if (!IsUseSkill(3, 3)) return;
+        if (!IsUseSkill(3, 3)) return false;
 
         Vector2 targetPos = (Vector2)player.transform.position + (player.direction * radius);
 
@@ -204,7 +206,7 @@ public class BulletManager : MonoBehaviour
                 else if (e is GameObject go && go) candidates.Add(go.transform);
             }
         }
-        if (candidates.Count == 0) return;
+        if (candidates.Count == 0) return false;
 
         // 伝播の流れを構築：毎回現在位置から半径内で最も近い敵を選ぶ
         Transform current = player.transform;
@@ -250,11 +252,13 @@ public class BulletManager : MonoBehaviour
             Vector2 b = chainPoints[i + 1].position;
             connecter.CreateLineBetween(a, b);
         }
+
+        return true;
     }
 
-    public void UseSkill5_5()
+    public bool UseSkill5_5()
     {
-        if (!IsUseSkill(5, 5)) return;
+        if (!IsUseSkill(5, 5)) return false;
 
         GetComponent<ScreenFlash>().FlashSeconds(0.06f, 0.16f);
 
@@ -263,6 +267,8 @@ public class BulletManager : MonoBehaviour
         {
             enemy.TakeDamage(5, Vector2.zero);
         }
+
+        return true;
     }
 
     // デバッグ用三角形描画制御

@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class EnemySpawnaer : MonoBehaviour
 {
+
     [System.Serializable]
     public class EnemySpawnData
     {
-        [Header("Šî–{İ’è")]
         public GameObject prefab;
         [Range(0f, 100f)] public float weight = 10f; // ‘Š‘Îd‚İ
 

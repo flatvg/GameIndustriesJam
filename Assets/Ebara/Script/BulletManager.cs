@@ -13,6 +13,10 @@ public class BulletManager : MonoBehaviour
     [SerializeField] float angleSpeed = 100.0f;            // 親の回転速度(Z)
     public GameObject bulletPrefab;                        // 生成する弾
     public Player player;                                  // プレイヤー
+    public EnemySpawnaer spawnaer;
+    public int chainCount = 5;
+    public float thunderInterval = 0.05f;
+    Coroutine chainRoutine;
 
     [SerializeField] float spriteAlignDeg = 270f;          // スプライトに適用するz軸のオフセット
     [SerializeField] bool isDrawDebugTriangle = false;     // デバッグ用三角形描画フラグ
@@ -22,9 +26,11 @@ public class BulletManager : MonoBehaviour
 
     private float rot;                                     // 累積角
 
-    List<Bullet> bulletBuffer = new (); // スキルで使用するバレット
+    List<Bullet> bulletBuffer = new(); // スキルで使用するバレット
 
     public GameObject beamPrefab;
+
+    private ConnectTwoPoints connecter;
 
     // 直近値（変更検知用）
     int lastPointCount;
@@ -38,6 +44,8 @@ public class BulletManager : MonoBehaviour
         lastPointCount = pointCount;
         lastRadius = radius;
         lastIsDrawDebugTriangle = isDrawDebugTriangle;
+
+        connecter = GetComponent<ConnectTwoPoints>();
     }
 
     void Update()
@@ -63,12 +71,6 @@ public class BulletManager : MonoBehaviour
 
         // デバッグ用三角形描画制御
         HandleDebugTriangle();
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            GetComponent<ScreenFlash>().FlashSeconds(0.03f, 0.08f);
-            //UseBeam(2, 2);
-        }
     }
 
     // 回転位置を再生成
@@ -141,8 +143,7 @@ public class BulletManager : MonoBehaviour
         }
     }
 
-    // スキル(強力な攻撃)を使用
-    void UseBeam(int level, int count)
+    private bool IsUseSkill(int level, int count)
     {
         int c = 0;
         List<Bullet> skillBullets = new List<Bullet>();
@@ -153,9 +154,9 @@ public class BulletManager : MonoBehaviour
                 skillBullets.Insert(c++, bullet);
             }
         }
-        if (c < count) return;
+        if (c < count) return false;
 
-        for(int i = 0; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
             var v = skillBullets[i];
             if (v != null)
@@ -164,6 +165,14 @@ public class BulletManager : MonoBehaviour
             }
         }
         skillBullets.Clear();
+
+        return true;
+    }
+
+    // スキル(強力な攻撃)を使用
+    public void UseSkill2_2()
+    {
+        if (!IsUseSkill(2, 2)) return;
 
         Vector2 targetPos = (Vector2)player.transform.position + (player.direction * radius);
 
@@ -174,26 +183,87 @@ public class BulletManager : MonoBehaviour
         b.manager = this;
     }
 
-    //void TryShotFromClick(Vector2 clickScreenPos)
-    //{
-    //    // UI 上は無視（任意）
-    //    if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
+    public void UseSkill3_3()
+    {
+        if (!IsUseSkill(3, 3)) return;
 
-    //    var cam = Camera.main;
-    //    if (!cam) return;
+        Vector2 targetPos = (Vector2)player.transform.position + (player.direction * radius);
 
-    //    // 自分のスクリーン座標
-    //    Vector3 selfScreen = cam.WorldToScreenPoint(transform.position);
-    //    Vector2 dirScreen = clickScreenPos - (Vector2)selfScreen;
-    //    if (dirScreen.sqrMagnitude < 1e-8f) return;
+        // 伝播リスト（最初はプレイヤー）
+        List<Transform> chainPoints = new List<Transform> { player.transform };
 
-    //    // スクリーン → ワールド（XY前提）
-    //    float zDist = Mathf.Abs(transform.position.z - cam.transform.position.z);
-    //    Vector3 clickWorld = cam.ScreenToWorldPoint(new Vector3(clickScreenPos.x, clickScreenPos.y, zDist));
-    //    Vector2 dirWorld = (Vector2)(clickWorld - transform.position);
+        // 画面内の敵を Transform リストへ（Transform／Component／GameObject 何でも対応）
+        var raw = spawnaer.GetInScreenEnemyes() as System.Collections.IEnumerable;
+        var candidates = new List<Transform>();
+        if (raw != null)
+        {
+            foreach (var e in raw)
+            {
+                if (e is Transform t) candidates.Add(t);
+                else if (e is Component cpt && cpt) candidates.Add(cpt.transform);
+                else if (e is GameObject go && go) candidates.Add(go.transform);
+            }
+        }
+        if (candidates.Count == 0) return;
 
-    //    Shot(dirWorld);
-    //}
+        // 伝播の流れを構築：毎回現在位置から半径内で最も近い敵を選ぶ
+        Transform current = player.transform;
+        float hopRadius = radius * 5;               // 1ホップの最大距離（必要なら調整）
+        int maxJumps = chainCount;                  // 何回跳ねるか（必要数だけ）
+        var used = new HashSet<Transform> { current };
+
+        for (int j = 0; j < maxJumps; j++)
+        {
+            Transform next = null;
+            float bestSq = hopRadius * hopRadius;
+
+            for (int i = 0; i < candidates.Count; i++)
+            {
+                var t = candidates[i];
+                if (t == null || used.Contains(t)) continue;
+
+                float d2 = (t.position - current.position).sqrMagnitude;
+                if (d2 <= bestSq)
+                {
+                    bestSq = d2;
+                    next = t;
+                }
+            }
+
+            if (next == null) break; // 半径内に対象なしで終了
+            chainPoints.Add(next);
+            used.Add(next);
+            current = next;
+        }
+
+        // 敵には一応確定ダメージを与える
+        foreach (Transform t in chainPoints)
+        {
+            var e = t.GetComponent<EnemyBase>();
+            e?.TakeDamage(3, Vector2.zero);
+        }
+
+        // 各リンク間に可視ライン（雷）を生成
+        for (int i = 0; i < chainPoints.Count - 1; i++)
+        {
+            Vector2 a = chainPoints[i].position;
+            Vector2 b = chainPoints[i + 1].position;
+            connecter.CreateLineBetween(a, b);
+        }
+    }
+
+    public void UseSkill5_5()
+    {
+        if (!IsUseSkill(5, 5)) return;
+
+        GetComponent<ScreenFlash>().FlashSeconds(0.06f, 0.16f);
+
+        var enemies = spawnaer.GetInScreenEnemyes();
+        foreach (var enemy in enemies)
+        {
+            enemy.TakeDamage(5, Vector2.zero);
+        }
+    }
 
     // デバッグ用三角形描画制御
     void HandleDebugTriangle(bool forceChange = false)
@@ -254,6 +324,19 @@ public class BulletManager : MonoBehaviour
         else
         {
             Debug.Log("Shotble Bullet Not Found.");
+        }
+    }
+
+    // プレイヤー死亡時処理
+    public void OnDeath()
+    {
+        foreach (var b in bullets)
+        {
+            if (b.isShot) continue;
+            Vector2 d = b.transform.position - (b.transform.forward * radius);
+            float deg = Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg;
+            if (deg < 0f) deg += 360f;
+            b.Shot(d, deg);
         }
     }
 

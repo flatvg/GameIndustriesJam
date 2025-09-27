@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3887704770937209737}
   - component: {fileID: 8214282469666648337}
-  - component: {fileID: 8381148021692505177}
   - component: {fileID: 4277541228322765948}
+  - component: {fileID: 8381148021692505177}
   - component: {fileID: 8909353206464616980}
   m_Layer: 0
   m_Name: SplitterEnemy
@@ -147,6 +147,25 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &8381148021692505177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7712322408652420593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93ac9e32f40469c49a4b9ee6f457ad32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 1
+  maxHp: 1
+  moveSpeed: 2
+  invincibilityDuration: 1
+  damageInvincibilityDuration: 0.2
+  invincibleColor: {r: 1, g: 0, b: 0, a: 1}
+  miniEnemyPrefab: {fileID: 2111480535058430036, guid: a99a2cd4599a5e14d8b575b277ae2f15, type: 3}
 --- !u!50 &8909353206464616980
 Rigidbody2D:
   serializedVersion: 4

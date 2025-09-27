@@ -7,6 +7,7 @@ using System.Threading;
 using UnityEditor;
 using UnityEditor.U2D;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
@@ -16,21 +17,27 @@ public class Player : MonoBehaviour
     private Animator anim;
     private float length = 0;
     private Vector2 spriteSize;
+    private Rigidbody2D rb;
+    private CameraShaker camShaker;
 
     public bool isDeath { get; private set; }
 
     public BulletManager manaComp;
     public bool isShot { get; private set; }
     public Vector2 direction { get; private set; }
+    public bool isSpecialMove { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
         isShot = false;
         isDeath = false;
+        isSpecialMove = false;
         gameObject.transform.position = Vector3.zero;
         anim = GetComponent<Animator>();
         sprRenderer = gameObject.GetComponent<SpriteRenderer>();
+        rb = gameObject.GetComponent<Rigidbody2D>();
+        camShaker = gameObject.GetComponent<CameraShaker>();
     }
 
     // Update is called once per frame
@@ -61,17 +68,22 @@ public class Player : MonoBehaviour
 #endif
         InCamera();
 
-        // テスト
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            isDeath = true;
-        }
+        //// テスト
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    isDeath = true;
+        //}
     }
 
+    private float prevAngle = 0;
+    private float anglerSpeed = 90f;
     private void Turn(float deltaTime, in Vector2 direction)
     {
-        float angle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
+        float angle = Mathf.Lerp(Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg, prevAngle, 0.5f);
         transform.rotation = Quaternion.Euler(0, 0, -angle);
+
+        //Quaternion targetAngle = Quaternion.Euler(0, 0, -angle);
+        //transform.rotation = Quaternion.RotateTowards(transform.rotation, targetAngle, anglerSpeed * Time.deltaTime);
     }
 
     private void UpdateSkill3_3()
@@ -110,7 +122,7 @@ public class Player : MonoBehaviour
             int mostNearEnemyIndex = 0;
             float mostNearEnemyLength = 1000;
             Vector2 playerPosition = transform.position;
-            for(int i = 0; i<enemyPos.Count; ++i)
+            for (int i = 0; i < enemyPos.Count; ++i)
             {
                 float distance = Vector2.Distance(playerPosition, enemyPos[i]);
 
@@ -169,6 +181,13 @@ public class Player : MonoBehaviour
             isShot = true;
             Debug.Log("Shot");
         }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            // TODO 必殺攻撃
+            //camShaker.Shake(0.5f, 0.3f);
+            ShotSpecialMove(0.5f, 0.3f, 1f);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -185,15 +204,59 @@ public class Player : MonoBehaviour
 
     private void InCamera()
     {
+        Vector3 pos = transform.position;
+        // カメラの境界を計算
         float topY = Camera.main.transform.position.y + Camera.main.orthographicSize;
         float bottomY = Camera.main.transform.position.y - Camera.main.orthographicSize;
         float halfWidth = Camera.main.orthographicSize * Camera.main.aspect;
         float rightX = Camera.main.transform.position.x + halfWidth;
         float leftX = Camera.main.transform.position.x - halfWidth;
 
-        if (transform.position.y > topY - spriteSize.y / 2) transform.position = new Vector3(transform.position.x, topY - spriteSize.y / 2, transform.position.z);
-        if (transform.position.y < bottomY + spriteSize.y / 2) transform.position = new Vector3(transform.position.x, bottomY + spriteSize.y / 2, transform.position.z);
-        if(transform.position.x > rightX - spriteSize.x /2) transform.position = new Vector2(rightX - spriteSize.x /2, transform.position.y);
-        if(transform.position.x < leftX + spriteSize.x /2) transform.position = new Vector2(leftX + spriteSize.x /2, transform.position.y);
+        // スプライトの半サイズ
+        float halfHeight = spriteSize.y;
+        float halfSpriteWidth = spriteSize.x;
+
+        // Y軸制限
+        pos.y = Mathf.Clamp(pos.y, bottomY + halfHeight, topY - halfHeight);
+
+        // X軸制限
+        pos.x = Mathf.Clamp(pos.x, leftX + halfSpriteWidth, rightX - halfSpriteWidth);
+
+        // 位置を更新
+        transform.position = pos;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("hit enemy");
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            // ちょっと無理やり？
+            rb.simulated = false;
+            isDeath = true;
+        }
+    }
+
+    private void ShotSpecialMove(float duration, float magnitude, float ratio)
+    {
+        camShaker.Shake(0.2f, 0.1f);
+        StartCoroutine(BeamTimeEffect(duration, ratio));
+    }
+
+
+    private float time = 0;
+    private IEnumerator BeamTimeEffect(float duration, float ratio)
+    {
+        float elapsed = 0.0f;
+        Time.timeScale = 0.1f;
+        while (Time.timeScale < 1)
+        {
+            time += 0.2f * Time.unscaledDeltaTime;
+            Time.timeScale += time * Time.deltaTime * 1.5f;
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        Time.timeScale = 1;
     }
 }

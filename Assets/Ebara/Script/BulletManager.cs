@@ -239,6 +239,11 @@ public class BulletManager : MonoBehaviour
         }
 
         // 敵には一応確定ダメージを与える
+        if(chainPoints.Count == 1)
+        {
+            // プレイヤーのみなので失敗
+            return false;
+        }
         foreach (Transform t in chainPoints)
         {
             var e = t.GetComponent<EnemyBase>();

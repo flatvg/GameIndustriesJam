@@ -142,7 +142,7 @@ MonoBehaviour:
   isShot: 0
   manager: {fileID: 0}
   duration: 2.27
-  targetY: 8.72
+  targetY: 24
   curve:
     serializedVersion: 2
     m_Curve:

@@ -1,7 +1,6 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,20 +13,20 @@ public class ChangeScene : MonoBehaviour
 
     private void Awake()
     {
-        //İ’è‚³‚ê‚Ä‚¢‚éƒV[ƒ“‚ª‘¶İ‚·‚é‚©Šm”F
+        //è¨­å®šã•ã‚Œã¦ã„ã‚‹ã‚·ãƒ¼ãƒ³ãŒå­˜åœ¨ã™ã‚‹ã‹ç¢ºèª
         if (string.IsNullOrEmpty(sceneName))
         {
-            Debug.LogError("sceneName‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.LogError("sceneNameãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
             return;
         }
         if (!Application.CanStreamedLevelBeLoaded(sceneName))
         {
-            Debug.LogError($"ƒV[ƒ“'{sceneName}'‚Í‘¶İ‚µ‚Ü‚¹‚ñBƒV[ƒ“–¼‚ğŠm”F‚·‚é‚©Aƒrƒ‹ƒhİ’è‚ÉƒV[ƒ“‚ğ’Ç‰Á‚µ‚Ä‚­‚¾‚³‚¢B");
+            Debug.LogError($"ã‚·ãƒ¼ãƒ³'{sceneName}'ã¯å­˜åœ¨ã—ã¾ã›ã‚“ã€‚ã‚·ãƒ¼ãƒ³åã‚’ç¢ºèªã™ã‚‹ã‹ã€ãƒ“ãƒ«ãƒ‰è¨­å®šã«ã‚·ãƒ¼ãƒ³ã‚’è¿½åŠ ã—ã¦ãã ã•ã„ã€‚");
             return;
         }
     }
 
-    // Start‚ÍÅ‰‚ÌƒtƒŒ[ƒ€‚ªXV‚³‚ê‚é‘O‚ÉŒÄ‚Ño‚³‚ê‚é
+    // Startã¯æœ€åˆã®ãƒ•ãƒ¬ãƒ¼ãƒ ãŒæ›´æ–°ã•ã‚Œã‚‹å‰ã«å‘¼ã³å‡ºã•ã‚Œã‚‹
     void Start()
     {
         Button button = GetComponent<Button>();
@@ -37,13 +36,13 @@ public class ChangeScene : MonoBehaviour
         }
     }
 
-    // XV‚Í1ƒtƒŒ[ƒ€‚É‚Â‚«1‰ñŒÄ‚Ño‚³‚ê‚é
+    // æ›´æ–°ã¯1ãƒ•ãƒ¬ãƒ¼ãƒ ã«ã¤ã1å›å‘¼ã³å‡ºã•ã‚Œã‚‹
     void Update()
     {
 
     }
 
-    //ƒNƒŠƒbƒN‚³‚ê‚½‚ç
+    //ã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸã‚‰
     private void Change()
     {
         Debug.Log("OnClick");

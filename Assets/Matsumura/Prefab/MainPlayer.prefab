@@ -182,6 +182,7 @@ GameObject:
   - component: {fileID: 2138126131638549541}
   - component: {fileID: 7708980559081024718}
   - component: {fileID: 6726080318663677169}
+  - component: {fileID: 186191972276276920}
   m_Layer: 0
   m_Name: MainPlayer
   m_TagString: Player
@@ -272,6 +273,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 4
   manaComp: {fileID: 0}
+  circlePrefab: {fileID: 6186864423274966515, guid: 97c4e22ebf1f4d54e8cf89bc8f355d49, type: 3}
+  Interval: 2
+  circleCount: 10
 --- !u!50 &2138126131638549541
 Rigidbody2D:
   serializedVersion: 4
@@ -281,13 +285,13 @@ Rigidbody2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7442517824661801234}
   m_BodyType: 0
-  m_Simulated: 0
+  m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.0001
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -350,3 +354,15 @@ MonoBehaviour:
   correctionValue: 2.5
   particlePrefab: {fileID: 5929667731636134192, guid: 33929ae4f701f334682635f6b68de18a, type: 3}
   isDied: 0
+--- !u!114 &186191972276276920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7442517824661801234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 061662f2bcfdf4e488cce114e4b2d9ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

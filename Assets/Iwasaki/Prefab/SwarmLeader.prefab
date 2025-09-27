@@ -112,6 +112,10 @@ MonoBehaviour:
   effectPrefab3: {fileID: 5753137198814695076, guid: fdf8fb89676ff254286ce719db140de3, type: 3}
   effectPrefab4: {fileID: 5249984473494354545, guid: 7f44ef063be834d409179aa23aad2584, type: 3}
   maxEffectPrefabs: 0
+  minionPrefab: {fileID: 740395791850905456, guid: cf0fcc789a87cab4eb2560b09b163a2b, type: 3}
+  minionCount: 10
+  spawnRadius: 2
+  size: 1
   buffRadius: 10
   speedBuffMultiplier: 1.3
   buffUpdateInterval: 0.5

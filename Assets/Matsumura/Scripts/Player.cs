@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     private Vector2 spriteSize;
     private Rigidbody2D rb;
     private CameraShaker camShaker;
+    private List<GameObject> objects = new List<GameObject>();
 
     public bool isDeath { get; private set; }
 
@@ -26,6 +27,11 @@ public class Player : MonoBehaviour
     public bool isShot { get; private set; }
     public Vector2 direction { get; private set; }
     public bool isSpecialMove { get; private set; }
+
+    // ó\ë™ê¸ä÷åW
+    public GameObject circlePrefab;
+    [SerializeField] float Interval = 2;
+    [SerializeField] int circleCount = 10;
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +44,11 @@ public class Player : MonoBehaviour
         sprRenderer = gameObject.GetComponent<SpriteRenderer>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         camShaker = gameObject.GetComponent<CameraShaker>();
+
+        for (int i = 0; i < circleCount; i++)
+        {
+            objects.Add(GameObject.Instantiate(circlePrefab, Vector3.zero, Quaternion.identity));
+        }
     }
 
     // Update is called once per frame
@@ -60,6 +71,8 @@ public class Player : MonoBehaviour
 
             // ÉXÉLÉã Å¶ëSëRÇ≈Ç´ÇƒÇ»Ç¢Ç©ÇÁ ç°ÇÃÇ∆Ç±ÇÎñ≥éãÇµÇƒÇƒ
             UpdateSkill3_3();
+
+            TrendLine();
         }
 
 #if !PLAYER_EYE
@@ -79,7 +92,7 @@ public class Player : MonoBehaviour
     private float anglerSpeed = 90f;
     private void Turn(float deltaTime, in Vector2 direction)
     {
-        float angle = Mathf.Lerp(Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg, prevAngle, 0.5f);
+        float angle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, -angle);
 
         //Quaternion targetAngle = Quaternion.Euler(0, 0, -angle);
@@ -185,7 +198,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             // TODO ïKéEçUåÇ
-            //camShaker.Shake(0.5f, 0.3f);
+            manaComp.UseSkill2_2();
             ShotSpecialMove(0.5f, 0.3f, 1f);
         }
     }
@@ -258,5 +271,21 @@ public class Player : MonoBehaviour
             yield return null;
         }
         Time.timeScale = 1;
+    }
+
+
+    private void TrendLine()
+    {
+        Vector2 startPos = transform.position;
+        int i = 1;
+        foreach (var obj  in objects)
+        {
+            obj.transform.position = startPos + direction.normalized * Interval * i;
+            i++;
+        }
+        //for (int i = 0; i < circleCount; i++)
+        //{
+        //    Vector2 pos = startPos + direction.normalized * Interval * i;
+        //}
     }
 }

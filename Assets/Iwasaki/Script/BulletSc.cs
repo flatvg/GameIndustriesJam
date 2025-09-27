@@ -67,7 +67,7 @@ public class BulletSc : MonoBehaviour
             //    playerController.TakeDamage(1, knockbackDir * 2f);
             //
             Destroy(gameObject);
-            SceneManager.LoadScene("Result");
+            SceneManager.LoadScene("SceneResult");
         }
     }
 }

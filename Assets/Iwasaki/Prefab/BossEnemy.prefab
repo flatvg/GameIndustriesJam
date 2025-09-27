@@ -1,5 +1,89 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &321666577754039324
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2452651448877044413}
+  - component: {fileID: 3620135569658911105}
+  m_Layer: 0
+  m_Name: InvincibleShield
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2452651448877044413
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 321666577754039324}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1465389209700178042}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &3620135569658911105
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 321666577754039324}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Color: {r: 0, g: 1, b: 0.935786, a: 0.047058824}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &5943051381199660366
 GameObject:
   m_ObjectHideFlags: 0
@@ -15,7 +99,7 @@ GameObject:
   - component: {fileID: 7793191443375840176}
   m_Layer: 0
   m_Name: BossEnemy
-  m_TagString: Enemy
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,7 +116,8 @@ Transform:
   m_LocalPosition: {x: -0.09, y: 11.54, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 2452651448877044413}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8653479194800208291
@@ -105,12 +190,30 @@ MonoBehaviour:
   invincibilityDuration: 0.2
   damageInvincibilityDuration: 0.2
   invincibleColor: {r: 1, g: 0, b: 0, a: 1}
+  effectPrefab0: {fileID: 7390075503051475359, guid: a0248d83e56de4142a97cca6661c759b, type: 3}
+  effectPrefab1: {fileID: 489570673015312589, guid: 0f6fe4b9bcd6565408d7ef2610378286, type: 3}
+  effectPrefab2: {fileID: 7111363547692172217, guid: 6ff1d0e412108f94d99454fc86cda65e, type: 3}
+  effectPrefab3: {fileID: 5753137198814695076, guid: fdf8fb89676ff254286ce719db140de3, type: 3}
+  effectPrefab4: {fileID: 5249984473494354545, guid: 7f44ef063be834d409179aa23aad2584, type: 3}
+  maxEffectPrefabs: 0
+  state: 0
+  shieldObject: {fileID: 321666577754039324}
+  warningCanvas: {fileID: 0}
+  verticalWarningPrefab: {fileID: 2508327918119372660, guid: ee9bd318e33f9614b99df717027a1431, type: 3}
+  horizontalWarningPrefab: {fileID: 1756927342892047992, guid: ca28c4300bba5144bacbc841c6e84ad5, type: 3}
+  verticalBeamPrefab: {fileID: 1301314564126772133, guid: 960f062c08130dc45822d32137453f1f, type: 3}
+  horizontalBeamPrefab: {fileID: 1603001744690290871, guid: 6d79620e35d7b7744b039a683627df7e, type: 3}
   minionPrefab: {fileID: 2111480535058430036, guid: a99a2cd4599a5e14d8b575b277ae2f15, type: 3}
-  spawnInterval: 10
-  spawnCount: 3
-  spawnRadius: 4
+  spawnInterval: 5
+  spawnCountPerTick: 2
+  spawnRadius: 0.5
+  spawnPhaseDuration: 8
+  warnDuration: 2
+  beamDuration: 0.5
+  postAttackDuration: 2
   movePoints:
-  - {x: 0.2, y: 4.78}
+  - {x: 0, y: 4.78}
+  - {x: 0, y: 5.5}
 --- !u!58 &3643868969559964117
 CircleCollider2D:
   m_ObjectHideFlags: 0

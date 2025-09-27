@@ -17,7 +17,7 @@ public class MinionEnemy : EnemyBase
     protected override void OnInit()
     {
         // 群れ敵の設定
-        hp = 0.5f; // 体力低め
+        hp = 1; // 体力低め
         baseMoveSpeed = moveSpeed;
         moveSpeed = Random.Range(baseMoveSpeed * 0.8f, baseMoveSpeed * 1.2f); // 速度にばらつき
         transform.localScale = Vector3.one * 0.7f; // サイズ小さめ

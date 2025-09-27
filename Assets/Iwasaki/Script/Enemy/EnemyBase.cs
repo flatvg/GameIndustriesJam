@@ -69,6 +69,10 @@ public class EnemyBase : MonoBehaviour
     {
         moveSpeed = speed;
     }
+    public bool GetIsDead()
+    {
+        return isDead;
+    }
 
     public GameObject effectPrefab0;
     public GameObject effectPrefab1;
@@ -209,10 +213,19 @@ public class EnemyBase : MonoBehaviour
         return moveSpeed * tempSpeedMultiplier;
     }
 
+    // 追加：派生クラスが状態由来の無敵を定義できるようにする
+    protected virtual bool IsStateInvincible()
+    {
+        return false;
+    }
+
+
     public virtual bool TakeDamage(int damage, Vector2 knockback)
     {
-        // 無敵時間中はダメージを受けない
-        if (isInvincible) return false;
+        // 時間制の無敵 or ステートベースの無敵が有効ならダメージを無効化
+        if (isInvincible || IsStateInvincible()) return false;
+
+        // ダメージ処理
         hp -= damage;
         if (rb != null)
         {

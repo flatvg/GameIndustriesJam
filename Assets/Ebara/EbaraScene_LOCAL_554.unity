@@ -382,6 +382,10 @@ PrefabInstance:
 
 '
       objectReference: {fileID: 0}
+    - target: {fileID: 3675917132490214423, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4878931204438954854, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -513,6 +517,10 @@ PrefabInstance:
 
 '
       objectReference: {fileID: 0}
+    - target: {fileID: 3675917132490214423, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4878931204438954854, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -628,8 +636,8 @@ RectTransform:
   m_GameObject: {fileID: 662080703}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 826081283}
   - {fileID: 2574642608661050251}
@@ -638,7 +646,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -587, y: -11}
+  m_AnchoredPosition: {x: 586, y: -533}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &674783160 stripped
@@ -709,7 +717,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2b520c31f5c0ed24aad5c46cb6f23bac, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2b8d32a40c299c443b65c3def7d854ad, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -757,6 +765,10 @@ PrefabInstance:
 
 
 '
+      objectReference: {fileID: 0}
+    - target: {fileID: 3675917132490214423, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4878931204438954854, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
       propertyPath: m_Pivot.x
@@ -875,6 +887,10 @@ PrefabInstance:
     - target: {fileID: 3675917132490214423, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
       propertyPath: m_text
       value: lv.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3675917132490214423, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4878931204438954854, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
       propertyPath: m_Pivot.x
@@ -1052,6 +1068,10 @@ PrefabInstance:
       value: 'lv.2
 
 '
+      objectReference: {fileID: 0}
+    - target: {fileID: 3675917132490214423, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4878931204438954854, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
       propertyPath: m_Pivot.x
@@ -1446,8 +1466,8 @@ RectTransform:
   m_GameObject: {fileID: 1027653936}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 699161340}
   - {fileID: 1162193608}
@@ -1456,7 +1476,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -316, y: 34}
+  m_AnchoredPosition: {x: 1112, y: -533}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1098388597
@@ -1484,6 +1504,10 @@ PrefabInstance:
       value: 'lv.2
 
 '
+      objectReference: {fileID: 0}
+    - target: {fileID: 3675917132490214423, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4878931204438954854, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
       propertyPath: m_Pivot.x
@@ -1875,6 +1899,10 @@ PrefabInstance:
       propertyPath: m_text
       value: lv.4
       objectReference: {fileID: 0}
+    - target: {fileID: 3675917132490214423, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4878931204438954854, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1990,8 +2018,8 @@ RectTransform:
   m_GameObject: {fileID: 1798787105}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 512472084}
   - {fileID: 1161430548}
@@ -2000,7 +2028,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -131, y: -20}
+  m_AnchoredPosition: {x: 851, y: -533}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1832178268
@@ -2211,7 +2239,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2b520c31f5c0ed24aad5c46cb6f23bac, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cd61949073978a048bc289f2dded95e9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2646,6 +2674,10 @@ PrefabInstance:
     - target: {fileID: 3474377555155841043, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
       propertyPath: m_Name
       value: UITriangle
+      objectReference: {fileID: 0}
+    - target: {fileID: 3675917132490214423, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4878931204438954854, guid: 909123013d2df1841ad5256747bc5b38, type: 3}
       propertyPath: m_Pivot.x

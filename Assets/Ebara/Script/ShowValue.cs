@@ -11,7 +11,7 @@ public class ShowValue : MonoBehaviour
     void Awake()
     {
         if (!label) label = GetComponentInChildren<TMP_Text>(true); // Žq‚©‚çŽ©“®Žæ“¾
-        if (!label) { Debug.LogError("TMP_Text‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½ƒbƒX"); enabled = false; return; }
+        if (!label) { Debug.LogError("TMP_Text‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½"); enabled = false; return; }
     }
 
     void Start()
@@ -27,6 +27,6 @@ public class ShowValue : MonoBehaviour
 
     void UpdateScoreText()
     {
-        label.SetText("Score: {0}", score);
+        label.SetText("Score: {0}", GameSession.Instance.attackScore + GameSession.Instance.timeScore);
     }
 }

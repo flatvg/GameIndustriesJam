@@ -9,9 +9,9 @@ public class EnemyBase : MonoBehaviour
 {
 
     [SerializeField, Header("基本パラメータ")]
-    protected float hp = 1f;
+    protected int hp = 1;
     [SerializeField]
-    protected float maxHp = 1f;
+    protected int maxHp = 1;
     [SerializeField,Header("移動速度")]
     protected float moveSpeed = 2.0f;
 
@@ -101,7 +101,15 @@ public class EnemyBase : MonoBehaviour
         maxHp = hp;
         if (spriteRenderer != null)
         {
-            normalColor = spriteRenderer.color;
+            if (maxHp <= enemyColors.Length - 1)
+            {
+                normalColor = enemyColors[maxHp];
+                spriteRenderer.color = normalColor;
+            }
+            else
+            {
+                normalColor = spriteRenderer.color;
+            }
         }
     }
 

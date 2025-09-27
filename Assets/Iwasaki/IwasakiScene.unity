@@ -592,30 +592,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Spawner
       objectReference: {fileID: 0}
-    - target: {fileID: 8014678141497727822, guid: 0081dc47dc3ee5c458e8de2e3dfe6523, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8014678141497727822, guid: 0081dc47dc3ee5c458e8de2e3dfe6523, type: 3}
-      propertyPath: waves.Array.data[2].enemies.Array.data[0].weight
-      value: 75
-      objectReference: {fileID: 0}
-    - target: {fileID: 8014678141497727822, guid: 0081dc47dc3ee5c458e8de2e3dfe6523, type: 3}
-      propertyPath: waves.Array.data[2].enemies.Array.data[2].weight
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8014678141497727822, guid: 0081dc47dc3ee5c458e8de2e3dfe6523, type: 3}
-      propertyPath: waves.Array.data[2].enemies.Array.data[3].weight
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8014678141497727822, guid: 0081dc47dc3ee5c458e8de2e3dfe6523, type: 3}
-      propertyPath: waves.Array.data[3].enemies.Array.data[0].weight
-      value: 85
-      objectReference: {fileID: 0}
-    - target: {fileID: 8014678141497727822, guid: 0081dc47dc3ee5c458e8de2e3dfe6523, type: 3}
-      propertyPath: waves.Array.data[3].enemies.Array.data[2].weight
-      value: 5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

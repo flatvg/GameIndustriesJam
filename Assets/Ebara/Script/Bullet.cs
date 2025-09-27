@@ -19,6 +19,8 @@ public class Bullet : MonoBehaviour
     public Transform bindPoint;                            // 回転時の参照店
     private SpriteRenderer renderer;
 
+    private AudioSource audioSource;
+
     private int attackPower = 0;
     private int pirceCount = 0;   // 一度発射でのヒット数
     private int hitCount = 0;     // 累計ヒットする
@@ -49,6 +51,7 @@ public class Bullet : MonoBehaviour
     private void Awake()
     {
         renderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Start is called before the first frame update
@@ -167,6 +170,7 @@ public class Bullet : MonoBehaviour
     {
         if (isShot) return; // すでに発射されているのでスキップ
 
+        audioSource.Play();
         pirceCount = 0; // 貫通カウントリセット
         // 位置をプレイヤーの前に設定
         transform.position = (Vector2)manager.player.transform.position + (direction * manager.radius);

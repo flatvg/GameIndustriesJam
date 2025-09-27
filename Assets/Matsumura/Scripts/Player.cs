@@ -71,9 +71,6 @@ public class Player : MonoBehaviour
             // 射撃処理(入力とフラグだけ)
             UpdateShot();
 
-            // スキル ※全然できてないから 今のところ無視してて
-            //UpdateSkill3_3();
-
         }
         TrendLine();
 

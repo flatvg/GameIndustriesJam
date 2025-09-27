@@ -47,10 +47,10 @@ MonoBehaviour:
   waves:
   - waveName: Wave1
     waveNumber: 0
-    spawnInterval: 2
+    spawnInterval: 1.1
     spawnDistance: 0
-    maxEnemiesAtOnce: 15
-    waveDuration: 15
+    maxEnemiesAtOnce: 45
+    waveDuration: 20
     enemies:
     - prefab: {fileID: 2111480535058430036, guid: a99a2cd4599a5e14d8b575b277ae2f15, type: 3}
       weight: 95
@@ -85,9 +85,9 @@ MonoBehaviour:
     spawnOnlyDuringBossSpawnPhase: 0
   - waveName: Wave2
     waveNumber: 1
-    spawnInterval: 2
+    spawnInterval: 0.9
     spawnDistance: 0
-    maxEnemiesAtOnce: 15
+    maxEnemiesAtOnce: 40
     waveDuration: 15
     enemies:
     - prefab: {fileID: 2111480535058430036, guid: a99a2cd4599a5e14d8b575b277ae2f15, type: 3}
@@ -114,7 +114,7 @@ MonoBehaviour:
       baseMaxLevel: 1
       minLevelIncreasePerLoop: 0
       maxLevelIncreasePerLoop: 1
-      spawnChance: 0
+      spawnChance: 0.585
       speedMultiplier: 1
       sizeMultiplier: 1
     nextWaveDelay: 0
@@ -123,9 +123,9 @@ MonoBehaviour:
     spawnOnlyDuringBossSpawnPhase: 0
   - waveName: Wave3
     waveNumber: 2
-    spawnInterval: 2
+    spawnInterval: 0.8
     spawnDistance: 0
-    maxEnemiesAtOnce: 20
+    maxEnemiesAtOnce: 40
     waveDuration: 20
     enemies:
     - prefab: {fileID: 2111480535058430036, guid: a99a2cd4599a5e14d8b575b277ae2f15, type: 3}
@@ -170,10 +170,10 @@ MonoBehaviour:
     spawnOnlyDuringBossSpawnPhase: 0
   - waveName: Wave4
     waveNumber: 3
-    spawnInterval: 2
+    spawnInterval: 0.7
     spawnDistance: 0
-    maxEnemiesAtOnce: 25
-    waveDuration: 20
+    maxEnemiesAtOnce: 40
+    waveDuration: 40
     enemies:
     - prefab: {fileID: 2111480535058430036, guid: a99a2cd4599a5e14d8b575b277ae2f15, type: 3}
       weight: 85

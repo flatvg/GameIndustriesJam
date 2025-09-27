@@ -177,4 +177,4 @@ MonoBehaviour:
   bulletPrefab: {fileID: 2030513759603763073, guid: 6fae9724570d9bf4786bb814c2e09e3b, type: 3}
   fireInterval: 2
   orbitRadius: 5
-  orbitSpeed: 30
+  orbitSpeed: 20

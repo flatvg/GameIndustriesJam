@@ -39,6 +39,7 @@ public class OnDeath : MonoBehaviour
             {
                 if (playerComp.isDeath)
                 {
+                    playerComp.manaComp.OnDeath();
                     effect = Instantiate(particlePrefab, transform.position, Quaternion.Euler(90f, 0f, 0f));
                     effect.Play();
                     onDeath = true;

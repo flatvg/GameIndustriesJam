@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     private Vector2 spriteSize;
     private Rigidbody2D rb;
     private CameraShaker camShaker;
+    private List<GameObject> objects = new List<GameObject>();
 
     public bool isDeath { get; private set; }
 
@@ -26,10 +27,17 @@ public class Player : MonoBehaviour
     public bool isShot { get; private set; }
     public Vector2 direction { get; private set; }
     public bool isSpecialMove { get; private set; }
+    public bool enableMove { get; private set; }
+
+    // 予測線関係
+    public GameObject circlePrefab;
+    [SerializeField] float Interval = 2;
+    [SerializeField] int circleCount = 10;
 
     // Start is called before the first frame update
     void Start()
     {
+        enableMove = false;
         isShot = false;
         isDeath = false;
         isSpecialMove = false;
@@ -38,6 +46,11 @@ public class Player : MonoBehaviour
         sprRenderer = gameObject.GetComponent<SpriteRenderer>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         camShaker = gameObject.GetComponent<CameraShaker>();
+
+        for (int i = 0; i < circleCount; i++)
+        {
+            objects.Add(GameObject.Instantiate(circlePrefab, Vector3.zero, Quaternion.identity));
+        }
     }
 
     // Update is called once per frame
@@ -59,8 +72,10 @@ public class Player : MonoBehaviour
             UpdateShot();
 
             // スキル ※全然できてないから 今のところ無視してて
-            UpdateSkill3_3();
+            //UpdateSkill3_3();
+
         }
+        TrendLine();
 
 #if !PLAYER_EYE
         // アニメ
@@ -69,75 +84,78 @@ public class Player : MonoBehaviour
         InCamera();
 
         //// テスト
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    isDeath = true;
-        //}
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isDeath = true;
+        }
     }
 
     private float prevAngle = 0;
     private float anglerSpeed = 90f;
     private void Turn(float deltaTime, in Vector2 direction)
     {
-        float angle = Mathf.Lerp(Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg, prevAngle, 0.5f);
+        float angle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, -angle);
 
         //Quaternion targetAngle = Quaternion.Euler(0, 0, -angle);
         //transform.rotation = Quaternion.RotateTowards(transform.rotation, targetAngle, anglerSpeed * Time.deltaTime);
     }
 
-    private void UpdateSkill3_3()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            // Lv.3 以上のものがいくつあるか数える
-            int level3OverCount = 0;
-            List<int> level3Index = new List<int>();
-            for (int i = 0; i < 5; ++i)
-            {
-                if (manaComp.bullets[i].level >= 2)
-                {
-                    ++level3OverCount;
-                    level3Index.Add(i);
-                }
-            }
+    //private void UpdateSkill3_3()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.A))
+    //    {
+    //        // Lv.3 以上のものがいくつあるか数える
+    //        int level3OverCount = 0;
+    //        List<int> level3Index = new List<int>();
+    //        for (int i = 0; i < 5; ++i)
+    //        {
+    //            if (manaComp.bullets[i].level >= 2)
+    //            {
+    //                ++level3OverCount;
+    //                level3Index.Add(i);
+    //            }
+    //        }
 
-            // Lv.3 以上のものが 3つないのでスキル打てない
-            if (level3OverCount < 2) return;
+    //        // Lv.3 以上のものが 3つないのでスキル打てない
+    //        if (level3OverCount < 2) return;
 
-            // レベルを消費
-            for (int i = 0; i < 3; ++i)
-            {
-                manaComp.bullets[level3Index[i]].level = 1;
-            }
+    //        // レベルを消費
+    //        for (int i = 0; i < 3; ++i)
+    //        {
+    //            manaComp.bullets[level3Index[i]].level = 1;
+    //        }
 
-            // 敵を最大５体レーザービームで倒す
-            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-            List<Vector2> enemyPos = new List<Vector2>();
-            foreach (GameObject enemy in enemies)
-            {
-                enemyPos.Add(enemy.transform.position);
-            }
-            // プレイヤーに一番近い敵を見つけ出す。
-            int mostNearEnemyIndex = 0;
-            float mostNearEnemyLength = 1000;
-            Vector2 playerPosition = transform.position;
-            for (int i = 0; i < enemyPos.Count; ++i)
-            {
-                float distance = Vector2.Distance(playerPosition, enemyPos[i]);
+    //        // 敵を最大５体レーザービームで倒す
+    //        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+    //        List<Vector2> enemyPos = new List<Vector2>();
+    //        foreach (GameObject enemy in enemies)
+    //        {
+    //            enemyPos.Add(enemy.transform.position);
+    //        }
+    //        // プレイヤーに一番近い敵を見つけ出す。
+    //        int mostNearEnemyIndex = 0;
+    //        float mostNearEnemyLength = 1000;
+    //        Vector2 playerPosition = transform.position;
+    //        for (int i = 0; i < enemyPos.Count; ++i)
+    //        {
+    //            float distance = Vector2.Distance(playerPosition, enemyPos[i]);
 
-                if (distance < mostNearEnemyLength)
-                {
-                    mostNearEnemyLength = distance;
-                    mostNearEnemyIndex = i;
-                }
-            }
+    //            if (distance < mostNearEnemyLength)
+    //            {
+    //                mostNearEnemyLength = distance;
+    //                mostNearEnemyIndex = i;
+    //            }
+    //        }
 
-            GetComponent<ConnectTwoPoints>().CreateLineBetween(playerPosition, enemyPos[mostNearEnemyIndex]);
-            Debug.Log("Use Skill");
-        }
-    }
+    //        GetComponent<ConnectTwoPoints>().CreateLineBetween(playerPosition, enemyPos[mostNearEnemyIndex]);
+    //        Debug.Log("Use Skill");
+    //    }
+    //}
 
+    // ============================================================
+    //                        移動処理関数
+    // ============================================================
     private void Move(float deltaTime)
     {
         Vector2 pos = transform.position;
@@ -162,7 +180,12 @@ public class Player : MonoBehaviour
         length = Mathf.Clamp(length, 0, 3);
 
         if (length < 1.2f)
+        {
+            enableMove = false;
             length = 0;
+        }
+        else
+            enableMove = true;
 
         length = Mathf.Clamp(length, 0, 1);
 
@@ -185,11 +208,30 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             // TODO 必殺攻撃
-            //camShaker.Shake(0.5f, 0.3f);
-            ShotSpecialMove(0.5f, 0.3f, 1f);
+            if (manaComp.UseSkill2_2())
+            {
+                ShotSpecialMove(0.5f, 0.3f, 1f);
+            }
+        }
+        if(Input.GetKeyDown(KeyCode.S))
+        {
+            if (manaComp.UseSkill3_3())
+            {
+                ShotSpecialMove(0.5f, 0.3f, 1f);
+            }
+        }
+        if(Input.GetKeyDown(KeyCode.D))
+        {
+            if (manaComp.UseSkill5_5())
+            {
+                ShotSpecialMove(0.5f, 0.3f, 1f);
+            }
         }
     }
 
+    // ============================================================
+    //                     死亡処理(フラグだけ)
+    // ============================================================
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!isDeath)
@@ -258,5 +300,22 @@ public class Player : MonoBehaviour
             yield return null;
         }
         Time.timeScale = 1;
+    }
+
+    // ============================================================
+    //                          予測線関数
+    // ============================================================
+    private void TrendLine()
+    {
+        Vector2 startPos = transform.position;
+        int i = 1;
+        foreach (var obj  in objects)
+        {
+            obj.transform.position = startPos + direction.normalized * Interval * i;
+            i++;
+
+            if(isDeath)
+                obj.gameObject.SetActive(false);
+        }
     }
 }

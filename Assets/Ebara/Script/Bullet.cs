@@ -93,6 +93,7 @@ public class Bullet : MonoBehaviour
             transform.position += moveDirection * moveSpeed * Time.deltaTime;
 
             // 画面外に出たか判定
+            if (manager.player.isDeath) return;
             if (IsOutOfScreen(Camera.main))
             {
                 if (running == null)

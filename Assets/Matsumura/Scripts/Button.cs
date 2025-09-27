@@ -8,8 +8,7 @@ using UnityEngine.UI;
 
 public class ChangeScene : MonoBehaviour
 {
-    [SerializeField]
-    public string sceneName;
+    [SerializeField] public string sceneName;
 
     //[SerializeField] private SceneTransition sceneTransition;
 

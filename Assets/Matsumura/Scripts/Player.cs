@@ -1,4 +1,4 @@
-// ƒvƒŒƒCƒ„[‚ª–Ú‚©‚»ƒE‚¶‚á‚È‚¢‚©
+ï»¿// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒç›®ã‹ãã‚¦ã˜ã‚ƒãªã„ã‹
 #define PLAYER_EYE
 
 using System.Collections;
@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
     public bool isSpecialMove { get; private set; }
     public bool enableMove { get; private set; }
 
-    // —\‘ªüŠÖŒW
+    // äºˆæ¸¬ç·šé–¢ä¿‚
     public GameObject circlePrefab;
     [SerializeField] float Interval = 2;
     [SerializeField] int circleCount = 10;
@@ -60,30 +60,30 @@ public class Player : MonoBehaviour
 
         if (!isDeath)
         {
-            // “®‚«
+            // å‹•ã
             Move(deltaTime);
 
-            // Šp“x‚ğ•ÏX
+            // è§’åº¦ã‚’å¤‰æ›´
 #if PLAYER_EYE
             Turn(deltaTime, direction);
 #endif
 
-            // ËŒ‚ˆ—(“ü—Í‚Æƒtƒ‰ƒO‚¾‚¯)
+            // å°„æ’ƒå‡¦ç†(å…¥åŠ›ã¨ãƒ•ãƒ©ã‚°ã ã‘)
             UpdateShot();
 
-            // ƒXƒLƒ‹ ¦‘S‘R‚Å‚«‚Ä‚È‚¢‚©‚ç ¡‚Ì‚Æ‚±‚ë–³‹‚µ‚Ä‚Ä
+            // ã‚¹ã‚­ãƒ« â€»å…¨ç„¶ã§ãã¦ãªã„ã‹ã‚‰ ä»Šã®ã¨ã“ã‚ç„¡è¦–ã—ã¦ã¦
             //UpdateSkill3_3();
 
         }
         TrendLine();
 
 #if !PLAYER_EYE
-        // ƒAƒjƒ
+        // ã‚¢ãƒ‹ãƒ¡
         UpdateAnim();
 #endif
         InCamera();
 
-        //// ƒeƒXƒg
+        //// ãƒ†ã‚¹ãƒˆ
         if (Input.GetKeyDown(KeyCode.Space))
         {
             isDeath = true;
@@ -105,7 +105,7 @@ public class Player : MonoBehaviour
     //{
     //    if (Input.GetKeyDown(KeyCode.A))
     //    {
-    //        // Lv.3 ˆÈã‚Ì‚à‚Ì‚ª‚¢‚­‚Â‚ ‚é‚©”‚¦‚é
+    //        // Lv.3 ä»¥ä¸Šã®ã‚‚ã®ãŒã„ãã¤ã‚ã‚‹ã‹æ•°ãˆã‚‹
     //        int level3OverCount = 0;
     //        List<int> level3Index = new List<int>();
     //        for (int i = 0; i < 5; ++i)
@@ -117,23 +117,23 @@ public class Player : MonoBehaviour
     //            }
     //        }
 
-    //        // Lv.3 ˆÈã‚Ì‚à‚Ì‚ª 3‚Â‚È‚¢‚Ì‚ÅƒXƒLƒ‹‘Å‚Ä‚È‚¢
+    //        // Lv.3 ä»¥ä¸Šã®ã‚‚ã®ãŒ 3ã¤ãªã„ã®ã§ã‚¹ã‚­ãƒ«æ‰“ã¦ãªã„
     //        if (level3OverCount < 2) return;
 
-    //        // ƒŒƒxƒ‹‚ğÁ”ï
+    //        // ãƒ¬ãƒ™ãƒ«ã‚’æ¶ˆè²»
     //        for (int i = 0; i < 3; ++i)
     //        {
     //            manaComp.bullets[level3Index[i]].level = 1;
     //        }
 
-    //        // “G‚ğÅ‘å‚T‘ÌƒŒ[ƒU[ƒr[ƒ€‚Å“|‚·
+    //        // æ•µã‚’æœ€å¤§ï¼•ä½“ãƒ¬ãƒ¼ã‚¶ãƒ¼ãƒ“ãƒ¼ãƒ ã§å€’ã™
     //        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
     //        List<Vector2> enemyPos = new List<Vector2>();
     //        foreach (GameObject enemy in enemies)
     //        {
     //            enemyPos.Add(enemy.transform.position);
     //        }
-    //        // ƒvƒŒƒCƒ„[‚Éˆê”Ô‹ß‚¢“G‚ğŒ©‚Â‚¯o‚·B
+    //        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ä¸€ç•ªè¿‘ã„æ•µã‚’è¦‹ã¤ã‘å‡ºã™ã€‚
     //        int mostNearEnemyIndex = 0;
     //        float mostNearEnemyLength = 1000;
     //        Vector2 playerPosition = transform.position;
@@ -154,28 +154,28 @@ public class Player : MonoBehaviour
     //}
 
     // ============================================================
-    //                        ˆÚ“®ˆ—ŠÖ”
+    //                        ç§»å‹•å‡¦ç†é–¢æ•°
     // ============================================================
     private void Move(float deltaTime)
     {
         Vector2 pos = transform.position;
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        // ƒ}ƒEƒX‚ÆƒvƒŒƒCƒ„[‚Æ‚ÌƒxƒNƒgƒ‹‚ğZo
+        // ãƒã‚¦ã‚¹ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç®—å‡º
         Vector2 vector = mousePos - pos;
-        // •ûŒüæ‚èo‚· direction ‚ÍQÆ‚·‚é‚½‚ß‚Éƒƒ“ƒo
+        // æ–¹å‘å–ã‚Šå‡ºã™ direction ã¯å‚ç…§ã™ã‚‹ãŸã‚ã«ãƒ¡ãƒ³ãƒ
         direction = vector.normalized;
 
 #if !PLAYER_EYE
-        // ƒXƒvƒ‰ƒCƒg‚Ì¶‰Eˆ—
+        // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®å·¦å³å‡¦ç†
         if (vector.x < 0)
             sprRenderer.flipX = true;
         else if (vector.x > 0)
             sprRenderer.flipX = false;
 #endif
 
-        // ƒ}ƒEƒX‚ÆƒvƒŒƒCƒ„[‚ÌƒxƒNƒgƒ‹‚Ì’·‚³@
-        // ‚±‚ê‚ğg‚Á‚ÄAƒ}ƒEƒX‚ÆƒvƒŒƒCƒ„[‚ª—£‚ê‚Ä‚¢‚ê‚ÎƒXƒs[ƒh
+        // ãƒã‚¦ã‚¹ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ™ã‚¯ãƒˆãƒ«ã®é•·ã•
+        // ã“ã‚Œã‚’ä½¿ã£ã¦ã€ãƒã‚¦ã‚¹ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒé›¢ã‚Œã¦ã„ã‚Œã°ã‚¹ãƒ”ãƒ¼ãƒ‰
         length = vector.magnitude;
         length = Mathf.Clamp(length, 0, 3);
 
@@ -197,7 +197,7 @@ public class Player : MonoBehaviour
     {
         isShot = false;
 
-        // ƒ}ƒEƒX¶ƒNƒŠƒbƒN‚ÅËŒ‚
+        // ãƒã‚¦ã‚¹å·¦ã‚¯ãƒªãƒƒã‚¯ã§å°„æ’ƒ
         if (Input.GetMouseButtonDown(0))
         {
             manaComp?.Shot(direction);
@@ -207,7 +207,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            // TODO •KEUŒ‚
+            // TODO å¿…æ®ºæ”»æ’ƒ
             if (manaComp.UseSkill2_2())
             {
                 ShotSpecialMove(0.5f, 0.3f, 1f);
@@ -230,12 +230,12 @@ public class Player : MonoBehaviour
     }
 
     // ============================================================
-    //                     €–Sˆ—(ƒtƒ‰ƒO‚¾‚¯)
+    //                     æ­»äº¡å‡¦ç†(ãƒ•ãƒ©ã‚°ã ã‘)
     // ============================================================
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!isDeath)
-            isDeath = true;
+        //if (!isDeath)
+        //    isDeath = true;
     }
 
     private void UpdateAnim()
@@ -247,24 +247,24 @@ public class Player : MonoBehaviour
     private void InCamera()
     {
         Vector3 pos = transform.position;
-        // ƒJƒƒ‰‚Ì‹«ŠE‚ğŒvZ
+        // ã‚«ãƒ¡ãƒ©ã®å¢ƒç•Œã‚’è¨ˆç®—
         float topY = Camera.main.transform.position.y + Camera.main.orthographicSize;
         float bottomY = Camera.main.transform.position.y - Camera.main.orthographicSize;
         float halfWidth = Camera.main.orthographicSize * Camera.main.aspect;
         float rightX = Camera.main.transform.position.x + halfWidth;
         float leftX = Camera.main.transform.position.x - halfWidth;
 
-        // ƒXƒvƒ‰ƒCƒg‚Ì”¼ƒTƒCƒY
+        // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®åŠã‚µã‚¤ã‚º
         float halfHeight = spriteSize.y;
         float halfSpriteWidth = spriteSize.x;
 
-        // Y²§ŒÀ
+        // Yè»¸åˆ¶é™
         pos.y = Mathf.Clamp(pos.y, bottomY + halfHeight, topY - halfHeight);
 
-        // X²§ŒÀ
+        // Xè»¸åˆ¶é™
         pos.x = Mathf.Clamp(pos.x, leftX + halfSpriteWidth, rightX - halfSpriteWidth);
 
-        // ˆÊ’u‚ğXV
+        // ä½ç½®ã‚’æ›´æ–°
         transform.position = pos;
     }
 
@@ -277,7 +277,7 @@ public class Player : MonoBehaviour
             collision.gameObject.CompareTag("BossBeam")
         )
         {
-            // ‚¿‚å‚Á‚Æ–³—‚â‚èH
+            // ã¡ã‚‡ã£ã¨ç„¡ç†ã‚„ã‚Šï¼Ÿ
             rb.simulated = false;
             isDeath = true;
         }
@@ -307,7 +307,7 @@ public class Player : MonoBehaviour
     }
 
     // ============================================================
-    //                          —\‘ªüŠÖ”
+    //                          äºˆæ¸¬ç·šé–¢æ•°
     // ============================================================
     private void TrendLine()
     {

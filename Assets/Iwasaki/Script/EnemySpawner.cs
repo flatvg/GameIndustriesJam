@@ -410,11 +410,15 @@ public class EnemySpawnaer : MonoBehaviour
     void OnGUI()
     {
         if (!showDebugInfo) return;
-        GUILayout.BeginArea(new Rect(10, 10, 420, 240));
-        GUILayout.Label($"=== Wave Spawner Debug ===");
-        GUILayout.Label($"Loop: {loopCount + 1}");
-        GUILayout.Label($"Wave: {(waves != null && currentWaveIndex < waves.Length ? waves[currentWaveIndex].waveName : "None")}");
-        GUILayout.Label($"Enemies Alive: {currentEnemyCount}");
+        GUIStyle bigStyle = new GUIStyle(GUI.skin.label);
+        bigStyle.fontSize = 40;                  // 文字サイズ
+        bigStyle.normal.textColor = Color.white; // 文字色
+
+        GUILayout.BeginArea(new Rect(50, 100, 2000, 1000),bigStyle);
+        GUILayout.Label("=== Wave Spawner Debug ===", bigStyle);
+        GUILayout.Label($"Loop: {loopCount + 1}", bigStyle);
+        GUILayout.Label($"Wave: {(waves != null && currentWaveIndex < waves.Length ? waves[currentWaveIndex].waveName : "None")}", bigStyle);
+        GUILayout.Label($"Enemies Alive: {currentEnemyCount}", bigStyle);
         GUILayout.EndArea();
     }
     #endregion

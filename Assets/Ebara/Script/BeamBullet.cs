@@ -10,14 +10,22 @@ public class BeamBullet : SkillBulletBase
     private SpriteFadeOut fadeOut;
     public AnimationCurve curve = AnimationCurve.Linear(0, 0, 1, 1); // 補間カーブ
 
+    AudioSource source;
+
     CapsuleCollider2D col;
 
     private void Awake()
     {
+        source = GetComponent<AudioSource>();
         col = GetComponent<CapsuleCollider2D>();
         col.direction = CapsuleDirection2D.Vertical;
         fadeOut = GetComponent<SpriteFadeOut>();
+    }
+
+    private void Start()
+    {
         Shot();
+        source.Play();
         fadeOut.Play();
     }
 

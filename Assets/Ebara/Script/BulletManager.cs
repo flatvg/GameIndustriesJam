@@ -10,6 +10,9 @@ public class BulletManager : MonoBehaviour
     [SerializeField, Min(1)] int pointCount = 5;           // 弾の数（可変）
     public int bulletDamage = 1;                               // 弾のダメージ
 
+    [SerializeField] AudioClip skill5_5Clip;
+    [SerializeField] AudioClip skill3_3Clip;
+
     [SerializeField] float angleSpeed = 100.0f;            // 親の回転速度(Z)
     public GameObject bulletPrefab;                        // 生成する弾
     public Player player;                                  // プレイヤー
@@ -17,6 +20,8 @@ public class BulletManager : MonoBehaviour
     public int chainCount = 5;
     public float thunderInterval = 0.05f;
     Coroutine chainRoutine;
+
+    private AudioSource source;
 
     [SerializeField] float spriteAlignDeg = 270f;          // スプライトに適用するz軸のオフセット
     [SerializeField] bool isDrawDebugTriangle = false;     // デバッグ用三角形描画フラグ
@@ -46,6 +51,7 @@ public class BulletManager : MonoBehaviour
         lastIsDrawDebugTriangle = isDrawDebugTriangle;
 
         connecter = GetComponent<ConnectTwoPoints>();
+        source = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -187,7 +193,7 @@ public class BulletManager : MonoBehaviour
 
     public bool UseSkill3_3()
     {
-        if (!IsUseSkill(3, 3)) return false;
+        //if (!IsUseSkill(3, 3)) return false;
 
         Vector2 targetPos = (Vector2)player.transform.position + (player.direction * radius);
 
@@ -239,10 +245,21 @@ public class BulletManager : MonoBehaviour
         }
 
         // 敵には一応確定ダメージを与える
+        if(chainPoints.Count == 1)
+        {
+            // プレイヤーのみなので失敗
+            return false;
+        }
         foreach (Transform t in chainPoints)
         {
             var e = t.GetComponent<EnemyBase>();
             e?.TakeDamage(3, Vector2.zero);
+        }
+
+        if (skill3_3Clip != null)
+        {
+            source.clip = skill3_3Clip;
+            source.Play();
         }
 
         // 各リンク間に可視ライン（雷）を生成
@@ -258,9 +275,15 @@ public class BulletManager : MonoBehaviour
 
     public bool UseSkill5_5()
     {
-        if (!IsUseSkill(5, 5)) return false;
+        //if (!IsUseSkill(5, 5)) return false;
 
         GetComponent<ScreenFlash>().FlashSeconds(0.06f, 0.16f);
+
+        if(skill5_5Clip != null)
+        {
+            source.clip = skill5_5Clip;
+            source.Play();
+        }
 
         var enemies = spawnaer.GetInScreenEnemyes();
         foreach (var enemy in enemies)

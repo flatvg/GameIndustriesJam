@@ -36,7 +36,7 @@ public class SkillBulletBase : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // 敵と当たった時
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Boss")
         {
             EnemyBase enemy = collision.gameObject.GetComponent<EnemyBase>();
             if (enemy != null)

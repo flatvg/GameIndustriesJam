@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
     public bool isShot { get; private set; }
     public Vector2 direction { get; private set; }
     public bool isSpecialMove { get; private set; }
+    public bool enableMove { get; private set; }
 
     // 予測線関係
     public GameObject circlePrefab;
@@ -36,6 +37,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        enableMove = false;
         isShot = false;
         isDeath = false;
         isSpecialMove = false;
@@ -70,10 +72,10 @@ public class Player : MonoBehaviour
             UpdateShot();
 
             // スキル ※全然できてないから 今のところ無視してて
-            UpdateSkill3_3();
+            //UpdateSkill3_3();
 
-            TrendLine();
         }
+        TrendLine();
 
 #if !PLAYER_EYE
         // アニメ
@@ -82,10 +84,10 @@ public class Player : MonoBehaviour
         InCamera();
 
         //// テスト
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    isDeath = true;
-        //}
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isDeath = true;
+        }
     }
 
     private float prevAngle = 0;
@@ -99,57 +101,57 @@ public class Player : MonoBehaviour
         //transform.rotation = Quaternion.RotateTowards(transform.rotation, targetAngle, anglerSpeed * Time.deltaTime);
     }
 
-    private void UpdateSkill3_3()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            // Lv.3 以上のものがいくつあるか数える
-            int level3OverCount = 0;
-            List<int> level3Index = new List<int>();
-            for (int i = 0; i < 5; ++i)
-            {
-                if (manaComp.bullets[i].level >= 2)
-                {
-                    ++level3OverCount;
-                    level3Index.Add(i);
-                }
-            }
+    //private void UpdateSkill3_3()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.A))
+    //    {
+    //        // Lv.3 以上のものがいくつあるか数える
+    //        int level3OverCount = 0;
+    //        List<int> level3Index = new List<int>();
+    //        for (int i = 0; i < 5; ++i)
+    //        {
+    //            if (manaComp.bullets[i].level >= 2)
+    //            {
+    //                ++level3OverCount;
+    //                level3Index.Add(i);
+    //            }
+    //        }
 
-            // Lv.3 以上のものが 3つないのでスキル打てない
-            if (level3OverCount < 2) return;
+    //        // Lv.3 以上のものが 3つないのでスキル打てない
+    //        if (level3OverCount < 2) return;
 
-            // レベルを消費
-            for (int i = 0; i < 3; ++i)
-            {
-                manaComp.bullets[level3Index[i]].level = 1;
-            }
+    //        // レベルを消費
+    //        for (int i = 0; i < 3; ++i)
+    //        {
+    //            manaComp.bullets[level3Index[i]].level = 1;
+    //        }
 
-            // 敵を最大５体レーザービームで倒す
-            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-            List<Vector2> enemyPos = new List<Vector2>();
-            foreach (GameObject enemy in enemies)
-            {
-                enemyPos.Add(enemy.transform.position);
-            }
-            // プレイヤーに一番近い敵を見つけ出す。
-            int mostNearEnemyIndex = 0;
-            float mostNearEnemyLength = 1000;
-            Vector2 playerPosition = transform.position;
-            for (int i = 0; i < enemyPos.Count; ++i)
-            {
-                float distance = Vector2.Distance(playerPosition, enemyPos[i]);
+    //        // 敵を最大５体レーザービームで倒す
+    //        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+    //        List<Vector2> enemyPos = new List<Vector2>();
+    //        foreach (GameObject enemy in enemies)
+    //        {
+    //            enemyPos.Add(enemy.transform.position);
+    //        }
+    //        // プレイヤーに一番近い敵を見つけ出す。
+    //        int mostNearEnemyIndex = 0;
+    //        float mostNearEnemyLength = 1000;
+    //        Vector2 playerPosition = transform.position;
+    //        for (int i = 0; i < enemyPos.Count; ++i)
+    //        {
+    //            float distance = Vector2.Distance(playerPosition, enemyPos[i]);
 
-                if (distance < mostNearEnemyLength)
-                {
-                    mostNearEnemyLength = distance;
-                    mostNearEnemyIndex = i;
-                }
-            }
+    //            if (distance < mostNearEnemyLength)
+    //            {
+    //                mostNearEnemyLength = distance;
+    //                mostNearEnemyIndex = i;
+    //            }
+    //        }
 
-            GetComponent<ConnectTwoPoints>().CreateLineBetween(playerPosition, enemyPos[mostNearEnemyIndex]);
-            Debug.Log("Use Skill");
-        }
-    }
+    //        GetComponent<ConnectTwoPoints>().CreateLineBetween(playerPosition, enemyPos[mostNearEnemyIndex]);
+    //        Debug.Log("Use Skill");
+    //    }
+    //}
 
     // ============================================================
     //                        移動処理関数
@@ -178,7 +180,12 @@ public class Player : MonoBehaviour
         length = Mathf.Clamp(length, 0, 3);
 
         if (length < 1.2f)
+        {
+            enableMove = false;
             length = 0;
+        }
+        else
+            enableMove = true;
 
         length = Mathf.Clamp(length, 0, 1);
 
@@ -201,7 +208,21 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             // TODO 必殺攻撃
-            //if (manaComp.UseSkill2_2())
+            if (manaComp.UseSkill2_2())
+            {
+                ShotSpecialMove(0.5f, 0.3f, 1f);
+            }
+        }
+        if(Input.GetKeyDown(KeyCode.S))
+        {
+            if (manaComp.UseSkill3_3())
+            {
+                ShotSpecialMove(0.5f, 0.3f, 1f);
+            }
+        }
+        if(Input.GetKeyDown(KeyCode.D))
+        {
+            if (manaComp.UseSkill5_5())
             {
                 ShotSpecialMove(0.5f, 0.3f, 1f);
             }
@@ -292,6 +313,9 @@ public class Player : MonoBehaviour
         {
             obj.transform.position = startPos + direction.normalized * Interval * i;
             i++;
+
+            if(isDeath)
+                obj.gameObject.SetActive(false);
         }
     }
 }

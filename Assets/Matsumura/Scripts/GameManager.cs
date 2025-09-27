@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     private bool isStart = false;
     private float exitTimer = 5;
+    private float tick = 0f;
 
     public OnDeath deathComp;
 
@@ -30,6 +31,14 @@ public class GameManager : MonoBehaviour
 
             if(exitTimer < 0)
                 SceneManager.LoadScene("Result");
+        }
+
+        tick += Time.deltaTime;
+
+        while (tick >= 1f)
+        {
+            tick -= 1f;
+            GameSession.Instance.timeScore++;
         }
     }
 }

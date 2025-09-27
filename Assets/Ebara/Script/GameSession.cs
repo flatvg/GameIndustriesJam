@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameSession : MonoBehaviour
 {
-    public static GameSession I { get; private set; }
+    public static GameSession Instance { get; private set; }
 
     // シーンをまたいで持ちたい値
     public int timeScore = 0;
@@ -14,8 +14,8 @@ public class GameSession : MonoBehaviour
 
     void Awake()
     {
-        if (I != null && I != this) { Destroy(gameObject); return; }
-        I = this;
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 

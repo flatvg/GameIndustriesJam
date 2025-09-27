@@ -71,17 +71,6 @@ public class BulletManager : MonoBehaviour
 
         // デバッグ用三角形描画制御
         HandleDebugTriangle();
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            //Vector2 start = new Vector2(player.transform.position.x, player.transform.position.y);
-            //Vector2 end = start + (player.direction * 5);
-            //connecter.CreateLineBetween(start, end);
-            //GetComponent<ScreenFlash>().FlashSeconds(0.03f, 0.08f); // テスト成功
-            //UseSkill2_2(); // テスト成功
-            //UseSkill3_3(); // テスト成功
-            UseSkill5_5();
-        }
     }
 
     // 回転位置を再生成
@@ -265,7 +254,7 @@ public class BulletManager : MonoBehaviour
 
     public void UseSkill5_5()
     {
-        //if (!IsUseSkill(5, 5)) return;
+        if (!IsUseSkill(5, 5)) return;
 
         GetComponent<ScreenFlash>().FlashSeconds(0.06f, 0.16f);
 

@@ -115,8 +115,30 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.tag == "Boss")
+        {
+            EnemyBase enemy = collision.gameObject.GetComponent<EnemyBase>();
+            if (enemy != null)
+            {
+                Vector2 knockBack = isShot ? Vector2.zero : enemy.transform.position - manager.player.transform.position;
+                if (enemy.TakeDamage(isShot ? level : 0, knockBack))
+                {
+                    hitCount++;
+                    pirceCount++;
+                    isShot = false;
+                    // コルーチン中断
+                    if (running != null)
+                    {
+                        StopCoroutine(running);
+                        running = null;
+                    }
+                }
+            }
+            return;
+        }
+
         // 敵と当たった時
-        if(collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy")
         {
             EnemyBase enemy = collision.gameObject.GetComponent<EnemyBase>();
             if(enemy != null)

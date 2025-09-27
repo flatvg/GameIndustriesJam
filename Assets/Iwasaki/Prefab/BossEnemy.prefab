@@ -187,6 +187,7 @@ MonoBehaviour:
   hp: 100
   maxHp: 100
   moveSpeed: 2
+  score: 1000
   invincibilityDuration: 0.2
   damageInvincibilityDuration: 0.2
   invincibleColor: {r: 1, g: 0, b: 0, a: 1}
@@ -212,8 +213,8 @@ MonoBehaviour:
   beamDuration: 0.5
   postAttackDuration: 2
   movePoints:
-  - {x: 0, y: 4.78}
-  - {x: 0, y: 5.5}
+  - {x: 0, y: 7}
+  - {x: 0, y: 9}
 --- !u!58 &3643868969559964117
 CircleCollider2D:
   m_ObjectHideFlags: 0

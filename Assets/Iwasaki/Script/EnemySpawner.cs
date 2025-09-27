@@ -105,18 +105,33 @@ public class EnemySpawnaer : MonoBehaviour
             for (int i = 0; i < waves.Length; i++)
             {
                 currentWaveIndex = i;
-                WaveSpawnConfig wave = waves[i];
 
-                // 周回補正を反映（UIなどで参照するならここで）
-                ApplyLoopScalingToWave(wave, loopCount);
+                // 元のWave設定をコピー
+                WaveSpawnConfig originalWave = waves[i];
+                WaveSpawnConfig workingWave = new WaveSpawnConfig();
+                workingWave.waveName = originalWave.waveName;
+                workingWave.waveNumber = originalWave.waveNumber;
+                workingWave.spawnInterval = originalWave.spawnInterval;
+                workingWave.spawnDistance = originalWave.spawnDistance;
 
-                if (showDebugInfo) Debug.Log($"Start Wave {wave.waveName} Loop:{loopCount + 1}");
+                // ここでループ数に応じて敵数を増やす
+                workingWave.maxEnemiesAtOnce =
+                    originalWave.maxEnemiesAtOnce + extraEnemiesPerLoop * loopCount;
 
-                yield return StartCoroutine(RunWave(wave));
+                workingWave.waveDuration = originalWave.waveDuration;
+                workingWave.enemies = originalWave.enemies;
+                workingWave.nextWaveDelay = originalWave.nextWaveDelay;
+                workingWave.bossWave = originalWave.bossWave;
+                workingWave.bossPrefab = originalWave.bossPrefab;
+                workingWave.spawnOnlyDuringBossSpawnPhase = originalWave.spawnOnlyDuringBossSpawnPhase;
+
+                if (showDebugInfo) Debug.Log($"Start Wave {workingWave.waveName} Loop:{loopCount + 1}");
+
+                yield return StartCoroutine(RunWave(workingWave));
 
                 // 次ウェーブへの待ち
                 if (i < waves.Length - 1 || loopWaves)
-                    yield return new WaitForSeconds(wave.nextWaveDelay);
+                    yield return new WaitForSeconds(workingWave.nextWaveDelay);
             }
 
             // 全Wave終わり -> 周回++

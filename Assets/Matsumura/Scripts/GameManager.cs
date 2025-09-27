@@ -38,7 +38,11 @@ public class GameManager : MonoBehaviour
         while (tick >= 1f)
         {
             tick -= 1f;
-            GameSession.Instance.timeScore++;
+            GameSession settion = GameSession.Instance;
+            if (settion != null)
+            {
+                settion.timeScore++;
+            }
         }
     }
 }

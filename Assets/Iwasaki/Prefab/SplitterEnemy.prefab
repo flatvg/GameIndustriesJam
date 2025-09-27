@@ -87,6 +87,31 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8381148021692505177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7712322408652420593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93ac9e32f40469c49a4b9ee6f457ad32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 1
+  maxHp: 1
+  moveSpeed: 2
+  invincibilityDuration: 1
+  damageInvincibilityDuration: 0.2
+  invincibleColor: {r: 1, g: 0, b: 0, a: 1}
+  effectPrefab0: {fileID: 7390075503051475359, guid: a0248d83e56de4142a97cca6661c759b, type: 3}
+  effectPrefab1: {fileID: 489570673015312589, guid: 0f6fe4b9bcd6565408d7ef2610378286, type: 3}
+  effectPrefab2: {fileID: 7111363547692172217, guid: 6ff1d0e412108f94d99454fc86cda65e, type: 3}
+  effectPrefab3: {fileID: 5753137198814695076, guid: fdf8fb89676ff254286ce719db140de3, type: 3}
+  effectPrefab4: {fileID: 5249984473494354545, guid: 7f44ef063be834d409179aa23aad2584, type: 3}
+  maxEffectPrefabs: 0
+  miniEnemyPrefab: {fileID: 2111480535058430036, guid: a99a2cd4599a5e14d8b575b277ae2f15, type: 3}
 --- !u!58 &4277541228322765948
 CircleCollider2D:
   m_ObjectHideFlags: 0

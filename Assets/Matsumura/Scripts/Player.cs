@@ -151,6 +151,9 @@ public class Player : MonoBehaviour
         }
     }
 
+    // ============================================================
+    //                        ˆÚ“®ˆ—ŠÖ”
+    // ============================================================
     private void Move(float deltaTime)
     {
         Vector2 pos = transform.position;
@@ -198,11 +201,16 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             // TODO •KEUŒ‚
-            manaComp.UseSkill2_2();
-            ShotSpecialMove(0.5f, 0.3f, 1f);
+            //if (manaComp.UseSkill2_2())
+            {
+                ShotSpecialMove(0.5f, 0.3f, 1f);
+            }
         }
     }
 
+    // ============================================================
+    //                     €–Sˆ—(ƒtƒ‰ƒO‚¾‚¯)
+    // ============================================================
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!isDeath)
@@ -273,7 +281,9 @@ public class Player : MonoBehaviour
         Time.timeScale = 1;
     }
 
-
+    // ============================================================
+    //                          —\‘ªüŠÖ”
+    // ============================================================
     private void TrendLine()
     {
         Vector2 startPos = transform.position;
@@ -283,9 +293,5 @@ public class Player : MonoBehaviour
             obj.transform.position = startPos + direction.normalized * Interval * i;
             i++;
         }
-        //for (int i = 0; i < circleCount; i++)
-        //{
-        //    Vector2 pos = startPos + direction.normalized * Interval * i;
-        //}
     }
 }

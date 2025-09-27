@@ -614,11 +614,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8014678141497727822, guid: 0081dc47dc3ee5c458e8de2e3dfe6523, type: 3}
       propertyPath: waves.Array.data[2].spawnInterval
-      value: 0.5
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 8014678141497727822, guid: 0081dc47dc3ee5c458e8de2e3dfe6523, type: 3}
       propertyPath: waves.Array.data[3].spawnInterval
       value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8014678141497727822, guid: 0081dc47dc3ee5c458e8de2e3dfe6523, type: 3}
+      propertyPath: waves.Array.data[4].spawnInterval
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8014678141497727822, guid: 0081dc47dc3ee5c458e8de2e3dfe6523, type: 3}
       propertyPath: waves.Array.data[0].maxEnemiesAtOnce
